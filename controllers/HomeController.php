@@ -24,7 +24,7 @@ use app\models\ContactForm;
                 $contactForm->loadData($request->getBody());
                 if($contactForm->validate() && $contactForm->send())
                 {
-                    Application::$app->session->setFlash('success', 'Your message has been sent successfully');
+                    Application::$app->session->setFlash('success', 'Your message has been mailed successfully');
                     return $response->redirect('/');
                 }
             }
@@ -36,6 +36,8 @@ use app\models\ContactForm;
             var_dump($body);
             return "handle contact";
         }
+
+        
     }
 
 ?>
