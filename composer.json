@@ -1,0 +1,18 @@
+{
+  "name": "adhik/mvc-1",
+  "autoload": {
+    "psr-4": {
+      "Adhik\\Mvc1\\": "src/",
+      "app\\": "./"
+    }
+  },
+  "authors": [
+    {
+      "name": "Kshitiz Adhikari",
+      "email": "adhikarikshitiz12@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
+}
