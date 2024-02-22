@@ -34,6 +34,8 @@ use app\models\User;
     
     $app->router->get('/user/user-home', [UserController::class, 'home']);
     $app->router->get('/user/user-profile',[UserController::class, 'profile']);
+    $app->router->get('/user/user-editDetails',[UserController::class, 'editDetails']);
+    $app->router->post('/user/user-editDetails',[UserController::class, 'editDetails']);
 
 
 

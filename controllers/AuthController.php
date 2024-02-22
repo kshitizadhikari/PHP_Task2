@@ -3,11 +3,10 @@
 
     use app\core\Application;
     use app\core\Controller;
-    use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-    use app\models\User;
     use app\models\LoginForm;
+    use app\models\UserRegisterForm;
 
     class AuthController extends Controller
     {
@@ -29,7 +28,7 @@
         {
             
             $this->setLayout('mainLayout');
-            $user = new User;
+            $user = new UserRegisterForm;
             if($request->isPost()) {
                 $user->loadData($request->getBody());
                 if($user->validate() && $user->save())

@@ -25,6 +25,7 @@ $this->title = 'User Profile Page';
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 Role: <?php echo $role->role; ?>
             </li>
+            <button class="btn btn-primary" onclick="window.location.href='/user/user-editDetails'" >Edit Details</button>
         </ul>
     </div>
     </div>
