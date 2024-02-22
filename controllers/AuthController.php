@@ -11,11 +11,6 @@
 
     class AuthController extends Controller
     {
-
-        public function __construct() {
-            $this->registerMiddleWare(new AuthMiddleware(['profile']));
-        }
-
         public function login(Request $request, Response $response)
         {
             $this->setLayout('mainLayout');
@@ -23,7 +18,7 @@
             if($request->isPost()) {
                 $loginForm->loadData($request->getBody());
                 if($loginForm->validate() && $loginForm->login()) {
-                    $response->redirect('/');
+                    $response->redirect('/user/user-home');
                     return;
                 }
             }
@@ -51,10 +46,5 @@
         {
             Application::$app->logout();
             return $response->redirect('/');
-        }
-
-        public function profile()
-        {
-            return $this->render('profile');
         }
     }

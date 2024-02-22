@@ -14,6 +14,7 @@
         public string $password = '';
         public string $confirmPassword = '';
         public int $status;
+        public int $role_id;
 
         public static function tableName(): string {
             return 'users';

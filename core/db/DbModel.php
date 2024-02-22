@@ -44,6 +44,5 @@ use app\core\Model;
 
             $statement->execute();
             return $statement->fetchObject(static::class);
-
         }
     }

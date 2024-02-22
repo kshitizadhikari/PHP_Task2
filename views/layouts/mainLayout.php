@@ -32,7 +32,7 @@ use app\core\Application;
       <?php else: ?>
         <ul class="navbar-nav ms-auto d-flex flex-row">
         <li class="nav-item px-3"> 
-              <a class="nav-link" href="/profile">Profile</a>
+              <a class="nav-link" href="../user/user-profile">Profile</a>
           </li>
           <li class="nav-item px-3"> 
             <?php echo Application::$app->user->getDisplayName() ?>

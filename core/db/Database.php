@@ -90,5 +90,30 @@ class Database
     {
         return $this->pdo->prepare($sql);
     }
+
+    public function query($query, $params = []) {
+        try {
+            $statement = self::prepare($query);
+            
+            if ((strpos(strtoupper($query), 'INSERT') === 0) || (strpos(strtoupper($query), 'UPDATE') === 0) || (strpos(strtoupper($query), 'DELETE') === 0)) {
+                return $statement->execute($params);
+            }
+            
+            if(strpos(strtoupper($query), 'SELECT') === 0) {
+                if ($statement->execute($params)) {
+                    return $statement->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    $errorInfo = $statement->errorInfo();
+                    echo "Query execution error: " . implode(", ", $errorInfo);
+                    return false;
+                }
+            }
+            
+            return $statement->execute($params);
+        } catch (PDOException $e) {
+            echo "Query execution error: " . $e->getMessage();
+            return false;
+        }
+    }
 }
 ?>
