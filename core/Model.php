@@ -32,7 +32,8 @@ abstract class Model
     }
 
     public function validate()
-    {
+    {   
+        $this->errors = [];
         foreach ($this->rules() as $attribute => $rules) {
             $value = $this->{$attribute}; // Corrected variable name
 
@@ -76,10 +77,13 @@ abstract class Model
                 }
             }
         }
-
         return empty($this->errors);
     }
 
+    public function unsetErrorArray()
+    {
+        unset($this->errors);
+    }
     private function addErrorForRule($attribute, $rule, $params = [])
     {
         $message = $this->errorMessages()[$rule] ?? '';

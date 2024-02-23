@@ -1,8 +1,7 @@
 <?php
     namespace app\models;
 
-use app\core\Model;
-use app\core\UserModel;
+    use app\core\Model;
 
     class Role extends Model
     {

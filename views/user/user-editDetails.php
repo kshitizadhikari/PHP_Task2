@@ -21,4 +21,4 @@ $this->title = 'User Edit Details Page';
     <?php echo $form->field($model, 'newPassword')->passwordField(); ?>
     <?php echo $form->field($model, 'confirmPassword')->passwordField(); ?>
     <button type="submit" class="btn btn-primary">Submit</button>
-<?php app\core\form\Form::end(); ?>
+<?php Form::end(); ?>
