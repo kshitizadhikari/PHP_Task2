@@ -17,13 +17,12 @@ use app\repository\RoleRepository;
         
         public function __construct() {
             $this->registerMiddleWare(new AuthMiddleware($this->role_id, []));
-            $this->userRepo = new UserRepository('User');
-            $this->roleRepo = new RoleRepository('Role');
+            $this->userRepo = new UserRepository();
+            $this->roleRepo = new RoleRepository();
         }
 
         public function home() {
             $this->setLayout('authorLayout');
-            
             return $this->render('/author/author-home');
         }
 
