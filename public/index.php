@@ -52,6 +52,7 @@ use app\core\Application;
     $app->router->post('/author/author-createBlog',[AuthorController::class, 'createBlog']);
     $app->router->get('/author/author-editBlog',[AuthorController::class, 'editBlog']);
     $app->router->post('/author/author-editBlog',[AuthorController::class, 'editBlog']);
+    $app->router->get('/author/author-deleteBlog',[AuthorController::class, 'deleteBlog']);
 
     $app->run();
 

@@ -93,5 +93,17 @@
             }
             return $this->render('/author/author-editBlog', ['model' => $blog]);
         }
+
+        public function deleteBlog(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            if($this->blogRepo->delete($blog_id)) {
+                Application::$app->session->setFlash('success', 'Blog deleted successfully');
+            } else {
+                Application::$app->session->setFlash('success', 'Blog deletion unsuccessful');
+            }
+            return $response->redirect('/author/author-home');
+        }
     }
 ?>

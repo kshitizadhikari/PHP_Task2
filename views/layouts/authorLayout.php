@@ -13,19 +13,21 @@ use app\core\Application;
     <body>
     <div class="d-flex flex-row mb-3 p-4">
         <ul class="navbar-nav mr-auto d-flex flex-row">
-            <li class="nav-item px-3">
+            <li class="nav-item text-center p-3">
                 <a class="nav-link" href="/author/author-home">Home</a>
             </li>
         </ul>
             <ul class="navbar-nav ms-auto d-flex flex-row">
-            <li class="nav-item px-3"> 
-                <a class="nav-link" href="../author/author-profile">Profile</a>
-            </li>
-            <li class="nav-item px-3"> 
-                <?php echo Application::$app->user->getDisplayName() ?>
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
-        </ul>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-center p-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <?php echo Application::$app->user->getDisplayName() ?>
+                </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="nav-link text-center" href="../author/author-profile">Profile</a></li>
+                        <li><a class="nav-link text-center" href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         
         <div class="container">

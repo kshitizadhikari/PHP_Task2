@@ -28,7 +28,7 @@ $this->title = 'Author Home Page';
                     <td><?php echo $blog['title'] ?></td>
                     <td><?php echo $blog['description'] ?></td>
                     <td><?php echo $blog['featured_img'] ?></td>
-                    <td><a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a>Delete</a></td>
+                    <td><a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
