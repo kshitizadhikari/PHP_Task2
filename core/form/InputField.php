@@ -10,6 +10,7 @@ class InputField extends BaseField
     public const FIELD_TYPE_TEXT = 'text';
     public const FIELD_TYPE_NUMBER = 'number';
     public const FIELD_TYPE_PASSWORD = 'password';
+    public const FIELD_TYPE_HIDDEN = 'hidden';
 
     public function __construct(Model $model, string $attribute)
     {
@@ -30,9 +31,16 @@ class InputField extends BaseField
                 $this->model->getFirstError($this->attribute)
             );
         }
+
     public function passwordField()
     {
         $this->fieldType = self::FIELD_TYPE_PASSWORD;
+        return $this;
+    }
+
+    public function hiddenField()
+    {
+        $this->fieldType = self::FIELD_TYPE_HIDDEN;
         return $this;
     }
 

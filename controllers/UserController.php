@@ -14,13 +14,13 @@ use app\models\User;
     class UserController extends Controller
     {
 
-        public UserRepository $userRepository;
-        public RoleRepository $roleRepository;
+        public UserRepository $userRepo;
+        public RoleRepository $roleRepo;
 
         public function __construct() {
             $this->registerMiddleWare(new AuthMiddleware(4, []));
-            $this->userRepository = new UserRepository();
-            $this->roleRepository = new RoleRepository();
+            $this->userRepo = new UserRepository();
+            $this->roleRepo = new RoleRepository();
         }
 
         public function home() {
@@ -29,16 +29,20 @@ use app\models\User;
 
         public function profile() {
             $user = Application::$app->user;
-            $role = $this->roleRepository->findById($user->role_id);
+            $role = $this->roleRepo->findById($user->role_id);
             return $this->render('/user/user-profile', ['user' => $user, 'role' => $role]);
         }
 
         public function editDetails(Request $request, Response $response) {
             $editDetailsForm = new UserEditDetailsForm;
+            $user = new User();
+            $user = $this->userRepo->findById($_SESSION['user']);
+            $editDetailsForm->firstName = $user->firstName;
+            $editDetailsForm->lastName = $user->lastName;
             if($request->isPost())
             {
                 $editDetailsForm->loadData($request->getBody());
-                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepository))
+                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepo))
                 {   
                     $response->redirect('/user/user-home');
                 }

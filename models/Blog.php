@@ -5,6 +5,7 @@
 
     class Blog extends Model
     {
+        public int $id=0;
         public string $title = '';
         public string $description = '';
         public string $featured_img = '';
@@ -16,15 +17,12 @@
         }
 
         public function attributes(): array {
-            return ['title', 'description', 'featured_img', 'user_id', 'status'];
-        }
-
-        public static function primaryKey(): string {
-            return 'id';
+            return ['id', 'title', 'description', 'featured_img', 'user_id', 'status'];
         }
 
         public function labels(): array {
             return [
+                'id' => 'ID',
                 'title' => 'Blog Title',
                 'description' => 'Description',
                 'featured_img' => 'Featured Image',

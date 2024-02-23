@@ -77,7 +77,11 @@ abstract class Model
                 }
             }
         }
-        return empty($this->errors);
+        if (empty($this->errors)) {
+            return true; // No errors, validation passed
+        } else {
+            return false; // Errors exist, validation failed
+        }
     }
 
     public function unsetErrorArray()

@@ -7,6 +7,7 @@
     use app\core\Request;
     use app\core\Response;
     use app\models\Blog;
+    use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\repository\BlogRepository;
     use app\repository\RoleRepository;
@@ -39,14 +40,18 @@
         }
 
 
-        public function editDetails(Request $request) {
+        public function editDetails(Request $request, Response $response) {
             $editDetailsForm = new UserEditDetailsForm;
-            if($request->isPost())
-            {
+            $user = new User();
+            $user = $this->userRepo->findById($_SESSION['user']);
+            $editDetailsForm->firstName = $user->firstName;
+            $editDetailsForm->lastName = $user->lastName;
+            $editDetailsForm->email = $user->email;
+            if($request->isPost()) {
                 $editDetailsForm->loadData($request->getBody());
-                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepo))
-                {   
-                    return 'success';
+                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepo)) {
+                    Application::$app->session->setFlash('success', 'User details updated successfully');
+                    return $response->redirect('/author/author-home');
                 }
             }
             return $this->render('/author/author-editDetails', ['model' => $editDetailsForm]);
@@ -55,11 +60,9 @@
         public function createBlog(Request $request, Response $response)
         {
             $blog = new Blog();
-            if($request->isPost())
-            {
+            if($request->isPost()) {
                 $blog->loadData($request->getBody());
-                if($blog->validate())
-                {
+                if($blog->validate()) {
                     $blog->unsetErrorArray();
                     $blog->user_id = $_SESSION['user'];
                     if($this->blogRepo->save($blog)){
@@ -70,6 +73,25 @@
             }
             return $this->render('/author/author-createBlog', ['model' => $blog]);
         }
-    }
 
+        public function editBlog(Request $request, Response $response) {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $blog = $this->blogRepo->findById($blog_id);
+
+            if($request->isPost())
+            {
+                $requestData = $request->getBody();
+                $blog = new Blog();
+                $blog = $this->blogRepo->findById($blog_id);
+                $blog->loadData($requestData);
+                $blog->unsetErrorArray();
+                $this->blogRepo->update($blog);
+                Application::$app->session->setFlash('success', 'Blog updated successfully');
+                return $response->redirect('/author/author-home');
+                
+            }
+            return $this->render('/author/author-editBlog', ['model' => $blog]);
+        }
+    }
 ?>

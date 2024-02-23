@@ -50,6 +50,8 @@ use app\core\Application;
     $app->router->post('/author/author-editDetails',[AuthorController::class, 'editDetails']);
     $app->router->get('/author/author-createBlog',[AuthorController::class, 'createBlog']);
     $app->router->post('/author/author-createBlog',[AuthorController::class, 'createBlog']);
+    $app->router->get('/author/author-editBlog',[AuthorController::class, 'editBlog']);
+    $app->router->post('/author/author-editBlog',[AuthorController::class, 'editBlog']);
 
     $app->run();
 
