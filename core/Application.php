@@ -2,7 +2,8 @@
     namespace app\core;
 
     use app\core\db\Database;
-    use Exception;
+use app\models\User;
+use Exception;
 
     class Application
     {
@@ -16,7 +17,7 @@
         public static Application $app;
         public ?Controller $controller = null;
         public Database $db;
-        public ?UserModel $user;
+        public ?User $user;
         public View $view;
 
         public function __construct($rootPath, array $config) {
