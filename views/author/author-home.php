@@ -29,8 +29,9 @@ $this->title = 'Author Home Page';
                     <td><?php echo $blog['description'] ?></td>
                     <td><?php echo $blog['featured_img'] ?></td>
                     <td>
+                        <a href="/author/author-viewBlog?id=<?php echo $blog['id']?>">View</a> |
                         <?php if($blog['user_id'] == $_SESSION['user']): ?>
-                        <a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
+                        <a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a><a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
                         <?php endif; ?>
                     </td>
                 </tr>

@@ -32,9 +32,14 @@ use app\core\Application;
         
         <div class="container">
         
-            <?php if(Application::$app->session->getFlash('success')): ?>
+        <?php if(Application::$app->session->getFlash('success')): ?>
             <div class="alert alert-success">
                 <?php echo Application::$app->session->getFlash('success') ?>
+            </div>
+        <?php endif; ?>
+        <?php if(Application::$app->session->getFlash('error')): ?>
+            <div class="alert alert-danger">
+                <?php echo Application::$app->session->getFlash('error') ?>
             </div>
         <?php endif; ?>
         {{content}}

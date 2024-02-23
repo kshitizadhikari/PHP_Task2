@@ -101,9 +101,22 @@
             if($this->blogRepo->delete($blog_id)) {
                 Application::$app->session->setFlash('success', 'Blog deleted successfully');
             } else {
-                Application::$app->session->setFlash('success', 'Blog deletion unsuccessful');
+                Application::$app->session->setFlash('error', 'Blog deletion unsuccessful');
             }
             return $response->redirect('/author/author-home');
         }
-    }
+
+        public function viewBlog(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $blog = new Blog();
+            $blog = $this->blogRepo->findById($blog_id); 
+            if(!$blog) {
+                Application::$app->session->setFlash('error', 'Blog view error');
+                return $response->redirect('/author/author-home');
+            }
+            return $this->render('/author/author-viewBlog', ['blog' => $blog]);
+        }
+    }   
 ?>

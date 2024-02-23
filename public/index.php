@@ -26,12 +26,10 @@ use app\core\Application;
     $app->router->get('/', [HomeController::class, 'home']);
     $app->router->get('/contact', [HomeController::class, 'contact']);
     $app->router->post('/contact',[HomeController::class, 'contact']);
-
     $app->router->get('/login',[AuthController::class, 'login']);
     $app->router->post('/login',[AuthController::class, 'login']);
     $app->router->get('/register',[AuthController::class, 'register']);
     $app->router->post('/register',[AuthController::class, 'register']);
-
     $app->router->get('/logout',[AuthController::class, 'logout']);
     
     //user routes
@@ -53,6 +51,7 @@ use app\core\Application;
     $app->router->get('/author/author-editBlog',[AuthorController::class, 'editBlog']);
     $app->router->post('/author/author-editBlog',[AuthorController::class, 'editBlog']);
     $app->router->get('/author/author-deleteBlog',[AuthorController::class, 'deleteBlog']);
+    $app->router->get('/author/author-viewBlog',[AuthorController::class, 'viewBlog']);
 
     $app->run();
 
