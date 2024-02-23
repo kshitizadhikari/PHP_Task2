@@ -5,7 +5,8 @@
     use app\core\Controller;
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
-    use app\models\User;
+use app\core\Response;
+use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
@@ -18,8 +19,8 @@
 
         public function __construct() {
             $this->registerMiddleWare(new AuthMiddleware(4, []));
-            $this->userRepository = new UserRepository('User');
-            $this->roleRepository = new RoleRepository('Role');
+            $this->userRepository = new UserRepository();
+            $this->roleRepository = new RoleRepository();
         }
 
         public function home() {
@@ -32,14 +33,14 @@
             return $this->render('/user/user-profile', ['user' => $user, 'role' => $role]);
         }
 
-        public function editDetails(Request $request) {
+        public function editDetails(Request $request, Response $response) {
             $editDetailsForm = new UserEditDetailsForm;
             if($request->isPost())
             {
                 $editDetailsForm->loadData($request->getBody());
                 if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepository))
                 {   
-                    return 'success';
+                    $response->redirect('/user/user-home');
                 }
             }
             return $this->render('/user/user-editDetails', ['model' => $editDetailsForm]);

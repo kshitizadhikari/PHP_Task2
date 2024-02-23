@@ -8,4 +8,8 @@
         {
             return 'roles';
         }
+        public function className(): string
+        {
+            return 'Role';
+        }
     }

@@ -11,10 +11,7 @@ use app\models\ContactForm;
     {
         
         public function home() {
-            $params = [
-                'name' => 'kshitiz',
-            ];
-            return $this->render('home', $params);
+            return $this->render('home');
         }
 
         public function contact(Request $request, Response $response) {

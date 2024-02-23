@@ -36,6 +36,11 @@
             return 'users';
         }
 
+        public function className(): string
+        {
+            return 'User';
+        }
+
         public function hashPassword(string $password)
         {
             return(password_hash($password, PASSWORD_DEFAULT));

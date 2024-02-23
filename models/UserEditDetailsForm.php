@@ -50,6 +50,6 @@ use app\repository\UserRepository;
             $user->email = $this->email;
             $user->password = $userRepo->hashPassword($this->newPassword);
             $userRepo->update($user);
-            return;
+            return true;
         }
     }

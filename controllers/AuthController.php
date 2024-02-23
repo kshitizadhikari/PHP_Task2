@@ -17,7 +17,16 @@
             if($request->isPost()) {
                 $loginForm->loadData($request->getBody());
                 if($loginForm->validate() && $loginForm->login()) {
-                    $response->redirect('/user/user-home');
+                    $user_role_id = Application::$app->user->role_id;
+                    if($user_role_id === 1) {
+                        $response->redirect('/admin/admin-home');
+                    } else if($user_role_id === 2) {
+                        $response->redirect('/editor/editor-home');
+                    } else if($user_role_id === 3) {
+                        $response->redirect('/author/author-home');
+                    } else if($user_role_id === 4) {
+                        $response->redirect('/user/user-home');
+                    }
                     return;
                 }
             }

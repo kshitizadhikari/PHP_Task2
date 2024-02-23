@@ -10,10 +10,10 @@ use app\core\db\Database;
         protected $tableName;
         protected $className;
 
-        public function __construct($className)
+        public function __construct()
         {
             $this->db = Application::$app->db;
-            $this->className = $className;
+            $this->className = static::className();
             $this->tableName = static::tableName();
         }
 

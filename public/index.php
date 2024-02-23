@@ -3,7 +3,8 @@
     use app\controllers\HomeController;
     use app\controllers\UserController;
     use app\controllers\AdminController;
-    use app\core\Application;
+use app\controllers\AuthorController;
+use app\core\Application;
     use app\models\User;
 
     require_once __DIR__.'/../vendor/autoload.php';
@@ -42,8 +43,10 @@
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
 
-
-
+    //author routes
+    $app->router->get('/author/author-home', [AuthorController::class, 'home']);
+    $app->router->get('/author/author-profile',[AuthorController::class, 'profile']);
+    $app->router->post('/author/author-editDetails',[AuthorController::class, 'editDetails']);
 
     $app->run();
 
