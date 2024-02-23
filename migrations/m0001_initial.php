@@ -17,7 +17,7 @@
 
             $sql = "
                     INSERT INTO roles (role) VALUES 
-                    ('admin'), ('author'), ('editor'), ('user');
+                    ('admin'), ('editor'), ('author'), ('user');
                 ";
             $db->pdo->exec($sql);
             
