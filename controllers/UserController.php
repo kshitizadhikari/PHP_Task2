@@ -17,7 +17,7 @@
         public RoleRepository $roleRepository;
 
         public function __construct() {
-            $this->registerMiddleWare(new AuthMiddleware());
+            $this->registerMiddleWare(new AuthMiddleware(4, []));
             $this->userRepository = new UserRepository('User');
             $this->roleRepository = new RoleRepository('Role');
         }

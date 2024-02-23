@@ -40,7 +40,6 @@ use app\repository\UserRepository;
         public function editDetails(UserRepository $userRepo)
         {
             $user = Application::$app->user;
-    
             if (!password_verify($this->oldPassword, $user->password)) {
                 $this->addError('oldPassword', "Password is incorrect");
                 return false;

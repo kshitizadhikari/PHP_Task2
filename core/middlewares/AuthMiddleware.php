@@ -8,9 +8,11 @@ use app\core\exceptions\ForbiddenException;
     {
 
         public array $actions = [];
+        public int $role_id;
 
-        public function __construct(array $actions = []) {
+        public function __construct(int $role_id,array $actions = []) {
             $this->actions = $actions;
+            $this->role_id = $role_id;
         }
         public function execute()
         {
@@ -21,6 +23,11 @@ use app\core\exceptions\ForbiddenException;
                     throw new ForbiddenException();
                 }
             }
+
+            if(Application::$app->user->role_id !== $this->role_id) {
+                throw new ForbiddenException();
+            }
+            
         }
     }
 
