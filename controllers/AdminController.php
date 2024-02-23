@@ -13,6 +13,7 @@
         protected $roleRepo;
         
         public function __construct() {
+            $this->setLayout('adminLayout');
             $this->registerMiddleWare(new AuthMiddleware(1, []));
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();

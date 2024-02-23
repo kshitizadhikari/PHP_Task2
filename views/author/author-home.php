@@ -10,7 +10,7 @@ $this->title = 'Author Home Page';
     <button onclick="window.location.href='/author/author-createBlog'">Create Blog</button>
 </div>
 
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped table-hover">
     <?php if($allBlogs != null): ?>
         <thead>
             <tr>
@@ -28,7 +28,11 @@ $this->title = 'Author Home Page';
                     <td><?php echo $blog['title'] ?></td>
                     <td><?php echo $blog['description'] ?></td>
                     <td><?php echo $blog['featured_img'] ?></td>
-                    <td><a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a></td>
+                    <td>
+                        <?php if($blog['user_id'] == $_SESSION['user']): ?>
+                        <a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
