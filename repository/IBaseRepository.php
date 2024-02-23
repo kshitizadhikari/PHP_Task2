@@ -15,6 +15,7 @@
         abstract public function findAll();
         abstract public function update($obj);
         abstract public function delete($id);
+        abstract public function tableName(): string;
 
     }
 ?>

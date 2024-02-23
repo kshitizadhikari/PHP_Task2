@@ -30,4 +30,14 @@
                 return null;
             }
         }
+        
+        public function tableName(): string
+        {
+            return 'users';
+        }
+
+        public function hashPassword(string $password)
+        {
+            return(password_hash($password, PASSWORD_DEFAULT));
+        }
     }

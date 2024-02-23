@@ -40,6 +40,7 @@ use app\core\db\DbModel;
 
         public function save()
         {
+            
             $this->password = password_hash($this->password, PASSWORD_DEFAULT);
             $this->status = self::STATUS_INACTIVE; 
             return parent::save();

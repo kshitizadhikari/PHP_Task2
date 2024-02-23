@@ -4,17 +4,17 @@
 use app\core\Application;
 use app\core\db\Database;
 
-    class BaseRepository extends IBaseRepository
+    abstract class BaseRepository extends IBaseRepository
     {
         protected Database $db;
         protected $tableName;
         protected $className;
 
-        public function __construct($tableName, $className)
+        public function __construct($className)
         {
             $this->db = Application::$app->db;
-            $this->tableName = $tableName;
             $this->className = $className;
+            $this->tableName = static::tableName();
         }
 
         public function save($obj)

@@ -20,7 +20,7 @@ use app\repository\UserRepository;
                 'firstName' => [self::RULE_REQUIRED, ],
                 'lastName' =>[self::RULE_REQUIRED],
                 'email' =>[self::RULE_REQUIRED, self::RULE_EMAIL],
-                'oldPassword' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
+                'oldPassword' => [self::RULE_REQUIRED],
                 'newPassword' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
                 'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match'=> 'newPassword']],
             ];
@@ -49,7 +49,7 @@ use app\repository\UserRepository;
             $user->firstName = $this->firstName;
             $user->lastName = $this->lastName;
             $user->email = $this->email;
-            $user->password = $this->newPassword;
+            $user->password = $userRepo->hashPassword($this->newPassword);
             $userRepo->update($user);
             return;
         }

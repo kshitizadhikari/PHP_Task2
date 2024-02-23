@@ -4,5 +4,8 @@
 
     class RoleRepository extends BaseRepository
     {
-        
+        public function tableName(): string
+        {
+            return 'roles';
+        }
     }

@@ -18,8 +18,8 @@
 
         public function __construct() {
             $this->registerMiddleWare(new AuthMiddleware());
-            $this->userRepository = new UserRepository('users', 'User');
-            $this->roleRepository = new RoleRepository('roles', 'Role');
+            $this->userRepository = new UserRepository('User');
+            $this->roleRepository = new RoleRepository('Role');
         }
 
         public function home() {
