@@ -1,10 +1,11 @@
 <?php
+    require_once("./cors.php");
     use app\controllers\AuthController;
     use app\controllers\HomeController;
     use app\controllers\UserController;
     use app\controllers\AdminController;
-use app\controllers\AuthorController;
-use app\core\Application;
+    use app\controllers\AuthorController;
+    use app\core\Application;
     use app\models\User;
 
     require_once __DIR__.'/../vendor/autoload.php';

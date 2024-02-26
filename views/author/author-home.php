@@ -27,7 +27,7 @@ $this->title = 'Author Home Page';
                     <td><?php echo $blog['id'] ?></td>
                     <td><?php echo $blog['title'] ?></td>
                     <td><?php echo $blog['description'] ?></td>
-                    <td><?php echo $blog['featured_img'] ?></td>
+                    <td><img src="<?php echo $blog['featured_img'] ?>" height="100rem" width="100rem" /></td>
                     <td>
                         <a href="/author/author-viewBlog?id=<?php echo $blog['id']?>">View</a> |
                         <?php if($blog['user_id'] == $_SESSION['user']): ?>
