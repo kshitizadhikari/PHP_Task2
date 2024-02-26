@@ -2,17 +2,17 @@
 /**
  * @var $this \app\core\View
  */
-$this->title = 'Author Profile Page';
+$this->title = 'Admin Profile Page';
 ?>
 
-<h1>Author Profile</h1>
+<h1>Admin Profile</h1>
 
 <div class="row">
     <div class="col-5">
         <div class="card border-primary mb-3" style="max-width: 20rem;">
             <div class="card-header">------</div>
                 <div class="card-body">
-                    <h4 class="card-title">Author Details</h4>
+                    <h4 class="card-title">Admin Details</h4>
                     <!-- <p class="card-text"></p> -->
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -27,7 +27,7 @@ $this->title = 'Author Profile Page';
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Role: <?php echo $role->role; ?>
                         </li>
-                        <button class="btn btn-primary" onclick="window.location.href='/author/author-editDetails'" >Edit Details</button>
+                        <button class="btn btn-primary" onclick="window.location.href='/admin/admin-editDetails'" >Edit Details</button>
                     </ul>
                 </div>
         </div>

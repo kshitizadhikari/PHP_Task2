@@ -41,6 +41,13 @@
 
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
+    $app->router->get('/admin/admin-profile',[AdminController::class, 'profile']);
+    $app->router->get('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
+    $app->router->post('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
+    $app->router->get('/admin/admin-editUser',[AdminController::class, 'editUser']);
+    $app->router->post('/admin/admin-editUser',[AdminController::class, 'editUser']);
+    $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
+
 
     //author routes
     $app->router->get('/author/author-home', [AuthorController::class, 'home']);

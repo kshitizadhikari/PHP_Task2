@@ -23,7 +23,7 @@ use app\core\Application;
                     <?php echo Application::$app->user->getDisplayName() ?>
                 </a>
                     <ul class="dropdown-menu">
-                        <!-- <li><a class="nav-link text-center" href="../admin/admin-profile">Profile</a></li> -->
+                        <li><a class="nav-link text-center" href="../admin/admin-profile">Profile</a></li>
                         <li><a class="nav-link text-center" href="/logout">Logout</a></li>
                     </ul>
                 </li>
@@ -32,9 +32,14 @@ use app\core\Application;
         
         <div class="container">
         
-            <?php if(Application::$app->session->getFlash('success')): ?>
+        <?php if(Application::$app->session->getFlash('success')): ?>
             <div class="alert alert-success">
                 <?php echo Application::$app->session->getFlash('success') ?>
+            </div>
+        <?php endif; ?>
+        <?php if(Application::$app->session->getFlash('error')): ?>
+            <div class="alert alert-danger">
+                <?php echo Application::$app->session->getFlash('error') ?>
             </div>
         <?php endif; ?>
         {{content}}
