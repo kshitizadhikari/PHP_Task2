@@ -11,6 +11,7 @@ class InputField extends BaseField
     public const FIELD_TYPE_NUMBER = 'number';
     public const FIELD_TYPE_PASSWORD = 'password';
     public const FIELD_TYPE_HIDDEN = 'hidden';
+    public const FIELD_TYPE_FILE = 'file';
 
     public function __construct(Model $model, string $attribute)
     {
@@ -41,6 +42,12 @@ class InputField extends BaseField
     public function hiddenField()
     {
         $this->fieldType = self::FIELD_TYPE_HIDDEN;
+        return $this;
+    }
+
+    public function fileField()
+    {
+        $this->fieldType = self::FIELD_TYPE_FILE;
         return $this;
     }
 

@@ -22,14 +22,14 @@
 
         public function labels(): array {
             return [
-                'id' => 'ID',
+                'id' => '',
                 'title' => 'Blog Title',
                 'description' => 'Description',
                 'featured_img' => 'Featured Image',
                 'status' => 'Blog Status',
             ];
         }
-        public function rules(): array
+        public function rules(): array  
         {
             return [
                 'title' => [self::RULE_REQUIRED],

@@ -64,8 +64,17 @@
                 $blog->loadData($request->getBody());
                 if($blog->validate()) {
                     $blog->unsetErrorArray();
-                    $blog->user_id = $_SESSION['user'];
+                    $blog->user_id = $_SESSION['user']; // set the blog's user id
+                    // Move uploaded file to destination
+                    //img_components[0] stores temporary path img_components[1] stores imageName
+                    $img_components = explode("#", $blog->featured_img); 
+                    $img_upload_dir = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
+                    $blog->featured_img = $img_upload_dir;
+                    if (!move_uploaded_file($img_components[0], $img_upload_dir)) {
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                    }
                     if($this->blogRepo->save($blog)){
+                        
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/author/author-home');
                     }

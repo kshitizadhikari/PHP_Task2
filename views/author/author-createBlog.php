@@ -15,6 +15,6 @@ $this->title = 'Author Create Blog Page';
 <?php $form = Form::begin('', 'post')?>
     <?php echo $form->field($model, 'title') ?>
     <?php echo new TextareaField($model, "description")?>
-    <?php echo $form->field($model, 'featured_img') ?>
+    <?php echo $form->field($model, 'featured_img')->fileField() ?>
     <button type="submit" class="btn btn-primary">Create</button>
 <?php Form::end(); ?>
