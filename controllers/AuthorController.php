@@ -89,7 +89,7 @@ use app\repository\BlogRepository;
                     $img_relative_path = "/assets/images/" . $img_components[1];
                     if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
                         Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
-                    }
+                    }   
                     
                     $blog->featured_img = $img_relative_path;
                     if($this->blogRepo->save($blog)){

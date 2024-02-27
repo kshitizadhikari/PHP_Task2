@@ -6,10 +6,17 @@
     use app\core\Request;
     use app\core\Response;
     use app\models\LoginForm;
-    use app\models\UserRegisterForm;
+use app\models\User;
+use app\models\UserRegisterForm;
+    use app\repository\UserRepository;
 
     class AuthController extends Controller
     {
+        protected UserRepository $userRepo;
+        public function __construct() {
+            $this->userRepo = new UserRepository;
+        }
+
         public function login(Request $request, Response $response)
         {
             $this->setLayout('mainLayout');
@@ -39,18 +46,24 @@
         {
             if($request->isPost()) {
                 $user = new UserRegisterForm();
-
                 $user->loadData($request->getBody());
-                if(!$user->validate() && $user->save())
+
+                if(!$user->validate())
                 {
-                Application::$app->session->setFlash('error', 'Unable to register');
                     return $this->render('register', ['model' => $user]);
                 }
-                Application::$app->session->setFlash('success', 'You have been successfully registered');
-                Application::$app->response->redirect('/');
-                return $response->redirect('/login');
+
+                $newUser = new User();
+                $newUser->loadData($user);
+                $newUser->password = $this->userRepo->hashPassword($newUser->password);
+                $newUser->unsetErrorArray();
+                if($this->userRepo->save($newUser))
+                {
+                    Application::$app->session->setFlash('success', 'You have been successfully registered');
+                    return $response->redirect('/login');
+
+                }
             }
-            
             $user = new UserRegisterForm();
             return $this->render('register', ['model' => $user]);
         }
