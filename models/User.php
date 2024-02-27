@@ -35,7 +35,8 @@
                 'email' => 'Email',
                 'password' => 'Password',
                 'status' => 'Status',
-                'role_id' => 'Role Id'
+                'role_id' => 'Role Id',
+                'id' => ''
             ];
         }
         public function rules(): array

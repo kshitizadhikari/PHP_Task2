@@ -43,13 +43,12 @@
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
     $app->router->get('/admin/admin-profile',[AdminController::class, 'profile']);
-    $app->router->get('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
-    $app->router->post('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
-    $app->router->get('/admin/admin-editUser',[AdminController::class, 'editUser']);
-    $app->router->post('/admin/admin-editUser',[AdminController::class, 'editUser']);
-    $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
     $app->router->get('/admin/admin-createUser',[AdminController::class, 'createUser']);
     $app->router->post('/admin/admin-createUser',[AdminController::class, 'createUser']);
+    $app->router->get('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
+    $app->router->post('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
+    $app->router->post('/admin/admin-changePassword',[AdminController::class, 'changePassword']);
+    $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
 
 
     //author routes

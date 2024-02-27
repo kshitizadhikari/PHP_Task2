@@ -33,7 +33,7 @@ $this->title = 'Admin Home Page';
                     <td><?php echo $user['role_id'] ?></td>
                     <td><?php echo $user['status'] ?></td>
                     <td>
-                        <a href="/admin/admin-editUser?id=<?php echo $user['id']?>">Edit</a> | 
+                        <a href="/admin/admin-editDetails?id=<?php echo $user['id']?>">Edit</a> | 
                         <a href="/admin/admin-deleteUser?id=<?php echo $user['id']?>">Delete</a>
                     </td>
                 </tr>

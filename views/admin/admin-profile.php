@@ -27,7 +27,7 @@ $this->title = 'Admin Profile Page';
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             Role: <?php echo $role->role; ?>
                         </li>
-                        <button class="btn btn-primary" onclick="window.location.href='/admin/admin-editDetails'" >Edit Details</button>
+                        <button class="btn btn-primary" onclick="window.location.href='/admin/admin-editDetails?id=<?php echo $_SESSION['user']?>'">Edit Details</button>
                     </ul>
                 </div>
         </div>

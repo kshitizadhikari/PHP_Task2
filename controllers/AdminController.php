@@ -8,8 +8,8 @@
     use app\core\Response;
     use app\models\User;
     use app\models\UserEditDetailsForm;
-use app\models\UserRegisterForm;
-use app\repository\RoleRepository;
+    use app\models\UserRegisterForm;
+    use app\repository\RoleRepository;
         use app\repository\UserRepository;
 
     class AdminController extends Controller
@@ -56,20 +56,33 @@ use app\repository\RoleRepository;
         }
 
         public function editDetails(Request $request, Response $response) {
-            $editDetailsForm = new UserEditDetailsForm;
-            $user = new User();
-            $user = $this->userRepo->findById($_SESSION['user']);
-            $editDetailsForm->firstName = $user->firstName;
-            $editDetailsForm->lastName = $user->lastName;
-            $editDetailsForm->email = $user->email;
-            if($request->isPost()) {
-                $editDetailsForm->loadData($request->getBody());
-                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepo)) {
-                    Application::$app->session->setFlash('success', 'User details updated successfully');
-                    return $response->redirect('/admin/admin-home');
+            if($request->isPost())
+            {
+                $user = new User();
+                $postData = $request->getBody();
+                $user = $this->userRepo->findById($postData['id']);
+                $user->firstName = $postData['firstName'];
+                $user->lastName = $postData['lastName'];
+                //if the admin is changing someone's else's info
+                if($user->id !== $_SESSION['user'])
+                {
+                    $user->email = $postData['email'];
+                    $user->role_id = $postData['role_id'];
                 }
+                $user->unsetErrorArray();
+                $this->userRepo->update($user);
+                return $response->redirect('/admin/admin-home');
             }
-            return $this->render('/admin/admin-editDetails', ['model' => $editDetailsForm]);
+
+            $user = new User();
+            $requestData = $request->getBody();
+            $user = $this->userRepo->findById($requestData['id']);
+            $user->password = '';
+            if($user==null) {
+                Application::$app->session->setFlash('error', 'User Not Found');
+                return $response->redirect('/admin/admin-home');
+            }
+            return $this->render('/admin/admin-editDetails', ['model'=>$user]);
         }
 
         public function editUser(Request $request, Response $response)
@@ -90,7 +103,7 @@ use app\repository\RoleRepository;
             $user = new User();
             $requestData = $request->getBody();
             $user = $this->userRepo->findById($requestData['id']);
-            
+            $user->password = '';
             if($user==null) {
                 Application::$app->session->setFlash('error', 'User Not Found');
                 return $response->redirect('/admin/admin-home');
@@ -108,6 +121,22 @@ use app\repository\RoleRepository;
             } else {
                 Application::$app->session->setFlash('error', 'user deletion unsuccessful');
             }
+            return $response->redirect('/admin/admin-home');
+        }
+
+        public function changePassword(Request $request, Response $response)
+        {
+            $user = new User();
+            $postData = $request->getBody();
+            $user = $this->userRepo->findById($postData['id']);
+            $newHashedPassword = $this->userRepo->hashPassword($postData['password']);
+            $user->password = $newHashedPassword;
+            $user->unsetErrorArray();
+            if(!$this->userRepo->update($user)) {
+                Application::$app->session->setFlash('error', 'Password change unsuccessful');
+                return;
+            }
+            Application::$app->session->setFlash('success', 'Password changes successfully');
             return $response->redirect('/admin/admin-home');
         }
     }
