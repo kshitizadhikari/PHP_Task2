@@ -48,6 +48,8 @@
     $app->router->get('/admin/admin-editUser',[AdminController::class, 'editUser']);
     $app->router->post('/admin/admin-editUser',[AdminController::class, 'editUser']);
     $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
+    $app->router->get('/admin/admin-createUser',[AdminController::class, 'createUser']);
+    $app->router->post('/admin/admin-createUser',[AdminController::class, 'createUser']);
 
 
     //author routes

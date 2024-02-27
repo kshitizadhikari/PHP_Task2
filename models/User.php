@@ -5,7 +5,7 @@
 
     class User extends UserModel
     {
-        const STATUS_INACTIVE = 0;
+        const STATUS_INACTIVE = 0;  
         const STATUS_ACTIVE = 1;
         const STATUS_DELETED = 2;
         public int $id;
@@ -13,15 +13,15 @@
         public string $lastName = '';
         public string $email = '';
         public string $password = '';
-        public int $status;
-        public int $role_id;
+        public int $status = 0;
+        public int $role_id = 4;
 
         public static function tableName(): string {
             return 'users';
         }
 
         public function attributes(): array {
-            return ['firstName', 'lastName', 'email', 'password', 'status'];
+            return ['firstName', 'lastName', 'email', 'password', 'status', 'role_id'];
         }
 
         public static function primaryKey(): string {
@@ -34,6 +34,8 @@
                 'lastName' => 'Last Name',
                 'email' => 'Email',
                 'password' => 'Password',
+                'status' => 'Status',
+                'role_id' => 'Role Id'
             ];
         }
         public function rules(): array

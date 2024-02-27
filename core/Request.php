@@ -43,8 +43,15 @@
 
             if($this->getMethod() == 'post')
             {
+                $filesUploaded = false;
+                foreach ($_FILES as $file) {
+                    if ($file['error'] == UPLOAD_ERR_OK) {
+                        $filesUploaded = true;
+                        break; // No need to continue checking once we find a successful upload
+                    }
+                }
                  // Check if request contains files
-                if (!empty($_FILES)) {
+                if ($filesUploaded) {
                     foreach ($_FILES as $key => $file) {
                         $img_name = $_FILES[$key]['name'];
                         $pictureName = pathinfo($img_name, PATHINFO_FILENAME);

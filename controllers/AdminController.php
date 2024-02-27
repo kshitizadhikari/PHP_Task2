@@ -8,7 +8,8 @@
     use app\core\Response;
     use app\models\User;
     use app\models\UserEditDetailsForm;
-    use app\repository\RoleRepository;
+use app\models\UserRegisterForm;
+use app\repository\RoleRepository;
         use app\repository\UserRepository;
 
     class AdminController extends Controller
@@ -34,6 +35,25 @@
             return $this->render('/admin/admin-profile', ['user' => $user, 'role' => $role]);
         }
 
+        public function createUser(Request $request, Response $response)
+        {
+            if($request->isPost())
+            {
+                $user = new User();
+                $user->loadData($request->getBody());
+                if($user->validate()) {
+                    $user->unsetErrorArray();
+                    $hashedPassword = $this->userRepo->hashPassword($user->password);
+                    $user->password = $hashedPassword;
+                    if($this->userRepo->save($user))
+                    Application::$app->session->setFlash('success', 'User created successfully');
+                    return $response->redirect('/admin/admin-home');
+                }
+                
+            }
+            $user = new User;
+            return $this->render('/admin/admin-createUser', ['model'=>$user]);
+        }
 
         public function editDetails(Request $request, Response $response) {
             $editDetailsForm = new UserEditDetailsForm;

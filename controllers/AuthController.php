@@ -33,7 +33,7 @@
             return $this->render('login', ['model' => $loginForm]);
         }  
 
-        public function register(Request $request)
+        public function register(Request $request, Response $response)
         {
             
             $this->setLayout('mainLayout');
@@ -45,7 +45,7 @@
                     Application::$app->session->setFlash('success', 'You have been successfully registered');
                     Application::$app->response->redirect('/');
                 }
-                return $this->render('register', ['model' => $user]);
+                return $response->redirect('/login');
             }
             return $this->render('register', ['model' => $user]);
         }

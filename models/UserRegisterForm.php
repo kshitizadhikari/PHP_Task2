@@ -21,7 +21,7 @@ use app\core\db\DbModel;
         }
 
         public function attributes(): array {
-            return ['firstName', 'lastName', 'email', 'password', 'status'];
+            return ['firstName', 'lastName', 'email', 'password', 'status', 'role_id'];
         }
 
         public static function primaryKey(): string {
@@ -35,6 +35,7 @@ use app\core\db\DbModel;
                 'email' => 'Email',
                 'password' => 'Password',
                 'confirmPassword' => 'Confirm Password',
+                'role_id' => 'Role Id',
             ];
         }
 
@@ -53,7 +54,8 @@ use app\core\db\DbModel;
                 'lastName' => [self::RULE_REQUIRED],
                 'email' => [self::RULE_REQUIRED, self::RULE_EMAIL, [self::RULE_UNIQUE, 'class' => self::class]],
                 'password' => [self::RULE_REQUIRED, [self::RULE_MIN, 'min' => 8], [self::RULE_MAX, 'max' => 24]],
-                'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']]
+                'confirmPassword' => [self::RULE_REQUIRED, [self::RULE_MATCH, 'match' => 'password']],
+                'role_id' => [self::RULE_REQUIRED]
             ];
         }
     }
