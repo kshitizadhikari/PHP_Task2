@@ -56,6 +56,8 @@
     $app->router->get('/author/author-profile',[AuthorController::class, 'profile']);
     $app->router->get('/author/author-editDetails',[AuthorController::class, 'editDetails']);
     $app->router->post('/author/author-editDetails',[AuthorController::class, 'editDetails']);
+    $app->router->get('/author/author-changePassword', [AuthorController::class, 'changePassword']);
+    $app->router->post('/author/author-changePassword', [AuthorController::class, 'changePassword']);
     $app->router->get('/author/author-createBlog',[AuthorController::class, 'createBlog']);
     $app->router->post('/author/author-createBlog',[AuthorController::class, 'createBlog']);
     $app->router->get('/author/author-editBlog',[AuthorController::class, 'editBlog']);

@@ -85,33 +85,6 @@
             return $this->render('/admin/admin-editDetails', ['model'=>$user]);
         }
 
-        public function editUser(Request $request, Response $response)
-        {
-            if($request->isPost())
-            {
-                $user = new User();
-                $postData = $request->getBody();
-                $user = $this->userRepo->findById($postData['id']);
-                $user->firstName = $postData['firstName'];
-                $user->lastName = $postData['lastName'];
-                $user->email = $postData['email'];
-                $user->role_id = $postData['role_id'];
-                $user->unsetErrorArray();
-                $this->userRepo->update($user);
-                return $response->redirect('/admin/admin-home');
-            }
-            $user = new User();
-            $requestData = $request->getBody();
-            $user = $this->userRepo->findById($requestData['id']);
-            $user->password = '';
-            if($user==null) {
-                Application::$app->session->setFlash('error', 'User Not Found');
-                return $response->redirect('/admin/admin-home');
-            }
-            
-            return $this->render('/admin/admin-editUser', ['model'=>$user]);
-        }
-
         public function deleteUser(Request $request, Response $response)
         {
             $requestData = $request->getBody();

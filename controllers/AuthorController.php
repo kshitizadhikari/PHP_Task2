@@ -9,7 +9,9 @@
     use app\models\Blog;
     use app\models\User;
     use app\models\UserEditDetailsForm;
-    use app\repository\BlogRepository;
+use app\models\UserEditPassword;
+use app\models\UserEditPasswordForm;
+use app\repository\BlogRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
 
@@ -41,28 +43,43 @@
 
 
         public function editDetails(Request $request, Response $response) {
-            $editDetailsForm = new UserEditDetailsForm;
-            $user = new User();
-            $user = $this->userRepo->findById($_SESSION['user']);
-            $editDetailsForm->firstName = $user->firstName;
-            $editDetailsForm->lastName = $user->lastName;
-            $editDetailsForm->email = $user->email;
-            if($request->isPost()) {
-                $editDetailsForm->loadData($request->getBody());
-                if($editDetailsForm->validate() && $editDetailsForm->editDetails($this->userRepo)) {
-                    Application::$app->session->setFlash('success', 'User details updated successfully');
-                    return $response->redirect('/author/author-home');
+            if($request->isPost())
+            {
+                $user = new UserEditDetailsForm();
+                $user->loadData($request->getBody());
+                if(!$user->validate())
+                {
+                    return $this->render('/author/author-editDetails', ['model' => $user]);
                 }
+                $toUpdateUser = new User();
+                $toUpdateUser = $this->userRepo->findById($user->id);
+                $toUpdateUser->firstName = $user->firstName;
+                $toUpdateUser->lastName = $user->lastName;
+                $toUpdateUser->email = $user->email;
+                $toUpdateUser->unsetErrorArray();
+                $this->userRepo->update($toUpdateUser);
+                return $response->redirect('/author/author-home');
             }
-            return $this->render('/author/author-editDetails', ['model' => $editDetailsForm]);
+
+            $user = new User();
+            $requestData = $request->getBody();
+            $user = $this->userRepo->findById($requestData['id']);
+            $user->password = '';
+            if($user==null) {
+                Application::$app->session->setFlash('error', 'User Not Found');
+                return $response->redirect('/author/author-home');
+            }
+            return $this->render('/author/author-editDetails', ['model'=>$user]); //return UserEditDetailsForm obj
         }
 
         public function createBlog(Request $request, Response $response)
         {
-            $blog = new Blog();
             if($request->isPost()) {
+                $blog = new Blog();
                 $blog->loadData($request->getBody());
-                if($blog->validate()) {
+                if(!$blog->validate()) {
+                    return $this->render('/author/author-createBlog', ['model' => $blog]);
+                }
                     $blog->unsetErrorArray();
                     $blog->user_id = $_SESSION['user']; // set the blog's user id
                     // Move uploaded file to destination
@@ -79,9 +96,9 @@
                         
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/author/author-home');
-                    }
                 }
             }
+            $blog = new Blog();
             return $this->render('/author/author-createBlog', ['model' => $blog]);
         }
 
@@ -128,6 +145,33 @@
                 return $response->redirect('/author/author-home');
             }
             return $this->render('/author/author-viewBlog', ['blog' => $blog]);
+        }
+
+        public function changePassword(Request $request, Response $response)
+        {
+            if($request->isPost())
+            {
+                $pwObj = new UserEditPasswordForm();
+                $pwObj->loadData($request->getBody());
+                if(!$pwObj->validate() || !$pwObj->checkPassword())
+                {
+                    return $this->render('/author/author-changePassword', ['model' => $pwObj]);
+                }
+                $user = new User();
+                $user = $this->userRepo->findById($_SESSION['user']);
+                $newHashedPassword = $this->userRepo->hashPassword($pwObj->newPassword);
+                $user->password = $newHashedPassword;
+                $user->unsetErrorArray();
+                if(!$this->userRepo->update($user)) {
+                    Application::$app->session->setFlash('error', 'Password change unsuccessful');
+                    return;
+                }
+                Application::$app->session->setFlash('success', 'Password changes successfully');
+                return $response->redirect('/author/author-home');
+            }
+
+            $pwObj = new UserEditPasswordForm();
+            return $this->render('/author/author-changePassword', ['model' => $pwObj]);
         }
     }   
 ?>

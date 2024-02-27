@@ -16,6 +16,8 @@
             $loginForm = new LoginForm();
             if($request->isPost()) {
                 $loginForm->loadData($request->getBody());
+                if(!$loginForm->validate()){
+                }
                 if($loginForm->validate() && $loginForm->login()) {
                     $user_role_id = Application::$app->user->role_id;
                     if($user_role_id === 1) {
@@ -27,7 +29,7 @@
                     } else if($user_role_id === 4) {
                         $response->redirect('/user/user-home');
                     }
-                    return;
+                    return $this->render('login', ['model' => $loginForm]);
                 }
             }
             return $this->render('login', ['model' => $loginForm]);
@@ -35,18 +37,21 @@
 
         public function register(Request $request, Response $response)
         {
-            
-            $this->setLayout('mainLayout');
-            $user = new UserRegisterForm;
             if($request->isPost()) {
+                $user = new UserRegisterForm();
+
                 $user->loadData($request->getBody());
-                if($user->validate() && $user->save())
+                if(!$user->validate() && $user->save())
                 {
-                    Application::$app->session->setFlash('success', 'You have been successfully registered');
-                    Application::$app->response->redirect('/');
+                Application::$app->session->setFlash('error', 'Unable to register');
+                    return $this->render('register', ['model' => $user]);
                 }
+                Application::$app->session->setFlash('success', 'You have been successfully registered');
+                Application::$app->response->redirect('/');
                 return $response->redirect('/login');
             }
+            
+            $user = new UserRegisterForm();
             return $this->render('register', ['model' => $user]);
         }
 

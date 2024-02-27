@@ -2,8 +2,6 @@
     namespace app\models;
     use app\core\Application;
     use app\core\Model;
-    use app\core\Request;
-    use app\core\Response;
     use app\models\User;
 
     class LoginForm extends Model

@@ -18,3 +18,6 @@ $this->title = 'Author Create Blog Page';
     <?php echo $form->field($model, 'featured_img')->fileField() ?>
     <button type="submit" class="btn btn-primary">Create</button>
 <?php Form::end(); ?>
+<div class="mt-3">
+    <button class="btn btn-primary  " onclick="window.location.href='/author/author-home'">Go Back</button>
+</div>

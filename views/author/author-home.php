@@ -7,7 +7,7 @@ $this->title = 'Author Home Page';
 ?>
 <h1>Author Home</h1>
 <div class="mb-3">
-    <button onclick="window.location.href='/author/author-createBlog'">Create Blog</button>
+    <button class="btn btn-primary" onclick="window.location.href='/author/author-createBlog'">Create Blog</button>
 </div>
 
 <table class="table table-dark table-striped table-hover">

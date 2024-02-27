@@ -7,7 +7,7 @@ $this->title = 'Admin Home Page';
 ?>
 <h1>Admin Home</h1>
 <div class="mb-3">
-    <button onclick="window.location.href='/admin/admin-createUser'">Create User</button>
+    <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createUser'">Create User</button>
 </div>
 
 <table class="table table-dark table-striped table-hover">
