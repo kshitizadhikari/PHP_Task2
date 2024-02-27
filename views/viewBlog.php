@@ -22,7 +22,7 @@ $this->title = 'Home View Blog Page';
                         Description: <?php echo $blog->description?>
                     </li>
                 </ul>
-                <button class="btn btn-primary" onclick="window.location.href='/Home/Home-home'" >Go Back</button>
+                <button class="btn btn-primary" onclick="window.location.href='/'" >Go Back</button>
             </div>
         </div>
         <div class="col-md-4">
