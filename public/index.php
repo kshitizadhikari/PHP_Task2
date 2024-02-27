@@ -25,6 +25,7 @@
     $app = new Application(dirname(__DIR__), $config);
 
     $app->router->get('/', [HomeController::class, 'home']);
+    $app->router->get('/home/home-viewBlog', [HomeController::class, 'viewBlog']);
     $app->router->get('/contact', [HomeController::class, 'contact']);
     $app->router->post('/contact',[HomeController::class, 'contact']);
     $app->router->get('/login',[AuthController::class, 'login']);

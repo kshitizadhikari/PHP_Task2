@@ -5,13 +5,20 @@ use app\core\Application;
 use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
+use app\models\Blog;
 use app\models\ContactForm;
+use app\repository\BlogRepository;
 
     class HomeController extends Controller
     {
+        protected BlogRepository $blogRepo;
+        public function __construct() {
+            $this->blogRepo = new BlogRepository();
+        }
         
         public function home() {
-            return $this->render('home');
+            $allBlogs = $this->blogRepo->findAll();
+            return $this->render('home', ['allBlogs' => $allBlogs]);
         }
 
         public function contact(Request $request, Response $response) {
@@ -34,7 +41,18 @@ use app\models\ContactForm;
             return "handle contact";
         }
 
-        
+        public function viewBlog(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $blog = new Blog();
+            $blog = $this->blogRepo->findById($blog_id); 
+            if(!$blog) {
+                Application::$app->session->setFlash('error', 'Blog view error');
+                return $response->redirect('/');
+            }
+            return $this->render('viewBlog', ['blog' => $blog]);
+        }
     }
 
 ?>
