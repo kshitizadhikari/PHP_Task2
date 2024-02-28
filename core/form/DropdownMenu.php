@@ -28,7 +28,7 @@ class DropdownMenu
                 </select>
                 <div class="invalid-feedback">%s</div>
             </div>',
-            $this->attribute,
+            $this->model->getLabel($this->attribute),
             $this->attribute,
             $optionsHtml,
             $this->model->getFirstError($this->attribute)

@@ -18,11 +18,22 @@ $this->title = 'Admin Edit Details Page';
     </div>
     <?php echo $form->field($model, 'email'); ?>
     <?php if($model->id !== $_SESSION['user']): ?>
-        <?php echo $form->dropdown($model, 'status', [
-            'Active' => 1,
-            'Deactivate' => 0,
-        ])->render(); ?>
-        <?php echo $form->field($model, 'role_id'); ?>
+    <div class="row">
+        <div class="col">
+            <?php echo $form->dropdown($model, 'status', [
+                'Active' => 1,
+                'Deactivate' => 0,
+            ])->render(); ?>
+        </div>
+        <div class="col">
+            <?php echo $form->dropdown($model, 'role_id', [
+                    'Admin' => 1,
+                    'Editor' => 2,
+                    'Author' => 3,
+                    'User' => 4,
+                ])->render(); ?>
+        </div>
+    </div>
     <?php endif; ?>
     <button type="submit" class="btn btn-primary">Submit</button>
     <button class="btn btn-primary" onclick="window.location.href='/admin/admin-home'">Go Back</button>

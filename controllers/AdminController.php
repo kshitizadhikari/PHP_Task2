@@ -46,15 +46,15 @@ use app\repository\RoleRepository;
             {
                 $user = new User();
                 $user->loadData($request->getBody());
-                if($user->validate()) {
-                    $user->unsetErrorArray();
-                    $hashedPassword = $this->userRepo->hashPassword($user->password);
-                    $user->password = $hashedPassword;
-                    if($this->userRepo->save($user))
-                    Application::$app->session->setFlash('success', 'User created successfully');
-                    return $response->redirect('/admin/admin-home');
+                if(!$user->validate()) {
+                    return $this->render('/admin/admin-createUser', ['model'=>$user]);
                 }
-                
+                $user->unsetErrorArray();
+                $hashedPassword = $this->userRepo->hashPassword($user->password);
+                $user->password = $hashedPassword;
+                if($this->userRepo->save($user))
+                Application::$app->session->setFlash('success', 'User created successfully');
+                return $response->redirect('/admin/admin-home');
             }
             $user = new User;
             return $this->render('/admin/admin-createUser', ['model'=>$user]);
@@ -63,17 +63,22 @@ use app\repository\RoleRepository;
         public function editDetails(Request $request, Response $response) {
             if($request->isPost())
             {
+                $postObj = new UserEditDetailsForm();
+                $postObj->loadData($request->getBody());
+                if(!$postObj->validate())
+                {   
+                    return $this->render('/admin/admin-editDetails', ['model'=>$postObj]);
+                }
                 $user = new User();
-                $postData = $request->getBody();
-                $user = $this->userRepo->findById($postData['id']);
-                $user->firstName = $postData['firstName'];
-                $user->lastName = $postData['lastName'];
+                $user = $this->userRepo->findById($postObj->id);
+                $user->firstName = $postObj->firstName;
+                $user->lastName = $postObj->lastName;
                 //if the admin is changing someone's else's info
                 if($user->id !== $_SESSION['user'])
                 {
-                    $user->email = $postData['email'];
-                    $user->role_id = $postData['role_id'];
-                    $user->status = $postData['status'];
+                    $user->email = $postObj->email;
+                    $user->role_id = $postObj->role_id;
+                    $user->status = $postObj->status;
                 }
                 $user->unsetErrorArray();
                 $this->userRepo->update($user);

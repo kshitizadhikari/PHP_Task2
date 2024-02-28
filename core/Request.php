@@ -30,6 +30,10 @@
             return $this->getMethod() === 'post';
         }
 
+        public function hasfile(string $key): bool {
+            return isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK;
+        }
+        
         public function getBody()
         {
             $body = [];

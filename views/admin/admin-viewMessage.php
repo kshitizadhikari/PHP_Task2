@@ -31,6 +31,8 @@ $this->title = 'Admin View Message Page';
             </div>
 </div>
 <div class="mb-3">
+    <?php if($message->status == 0): ?>
     <button class="btn btn-primary" onclick="window.location.href='/admin/admin-markMessageRead?id=<?php echo $message->id ?>'" >Mark as Read</button>
+    <?php endif; ?>
     <button class="btn btn-primary" onclick="window.location.href='/admin/admin-home'" >Go Back</button>
 </div>

@@ -10,6 +10,8 @@
         public string $firstName = '';
         public string $lastName = '';
         public string $email = '';
+        public string $status = '';
+        public string $role_id = '';
 
         public function rules(): array {
             return [

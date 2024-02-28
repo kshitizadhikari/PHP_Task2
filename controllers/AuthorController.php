@@ -103,17 +103,29 @@ use app\repository\BlogRepository;
         }
 
         public function editBlog(Request $request, Response $response) {
+            $blog = new Blog();
             $requestData = $request->getBody();
             $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
             $blog = $this->blogRepo->findById($blog_id);
 
             if($request->isPost())
             {
-                $requestData = $request->getBody();
                 $blog = new Blog();
-                $blog = $this->blogRepo->findById($blog_id);
-                $blog->loadData($requestData);
-                 // Move uploaded file to destination
+                $requestData = $request->getBody();
+                $blog = $this->blogRepo->findById($requestData['id']);
+                $blog->title = $requestData['title'] ?? $blog->title;
+                $blog->description = $requestData['description'] ?? $blog->description;
+                $blog->status = $requestData['status'] ?? $blog->status;
+                
+                if(!$blog->validate())
+                {
+                    return $this->render('/author/author-editBlog', ['model' => $blog]);
+                }
+
+                
+                if(isset($requestData['featured_img']))
+                {
+                    // Move uploaded file to destination
                     //img_components[0] stores temporary path img_components[1] stores imageName
                     $img_components = explode("#", $blog->featured_img); 
                     $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
@@ -121,14 +133,15 @@ use app\repository\BlogRepository;
                     if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
                         Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
                     }   
-                    
                     $blog->featured_img = $img_relative_path;
+                }
+                    
                 $blog->unsetErrorArray();
                 $this->blogRepo->update($blog);
                 Application::$app->session->setFlash('success', 'Blog updated successfully');
                 return $response->redirect('/author/author-home');
-                
             }
+
             return $this->render('/author/author-editBlog', ['model' => $blog]);
         }
 

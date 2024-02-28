@@ -17,6 +17,9 @@ $this->title = 'Author Edit Blog Page';
     <?php echo $form->field($model, 'title') ?>
     <?php echo new TextareaField($model, "description")?>
     <?php echo $form->field($model, 'featured_img')->fileField() ?>
-    <?php echo $form->field($model, 'status') ?>
+    <?php echo $form->dropdown($model, 'status', [
+        'Publish' => 1,
+        'Hide' => 0,
+    ])->render() ?>
     <button type="submit" class="btn btn-primary">Update</button>
 <?php Form::end(); ?>

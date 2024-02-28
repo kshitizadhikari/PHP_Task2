@@ -10,7 +10,7 @@
         public string $description = '';
         public string $featured_img = '';
         public int $user_id; //created by user_id
-        public int $status = 1; //blog status
+        public int $status=1; //blog status
 
         public static function tableName(): string {
             return 'blogs';
