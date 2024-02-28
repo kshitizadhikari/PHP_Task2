@@ -6,14 +6,17 @@ use app\core\Controller;
 use app\core\Request;
 use app\core\Response;
 use app\models\Blog;
-use app\models\ContactForm;
+use app\models\Contact;
 use app\repository\BlogRepository;
+use app\repository\ContactRepository;
 
     class HomeController extends Controller
     {
         protected BlogRepository $blogRepo;
+        protected ContactRepository $contactRepo;
         public function __construct() {
             $this->blogRepo = new BlogRepository();
+            $this->contactRepo = new ContactRepository();
         }
         
         public function home() {
@@ -22,17 +25,26 @@ use app\repository\BlogRepository;
         }
 
         public function contact(Request $request, Response $response) {
-            $contactForm = new ContactForm();
             if($request->isPost())
             {
-                $contactForm->loadData($request->getBody());
-                if($contactForm->validate() && $contactForm->send())
+                $contact = new Contact();
+                $contact->loadData($request->getBody());
+                if(!$contact->validate())
                 {
-                    Application::$app->session->setFlash('success', 'Your message has been mailed successfully');
+                    return $this->render('contact', ['model'=>$contact]);
+                }
+                $contact->unsetErrorArray();
+                if(!$this->contactRepo->save($contact))
+                {
+                    Application::$app->session->setFlash('error', 'Error sending message');
                     return $response->redirect('/');
                 }
+                Application::$app->session->setFlash('success', 'Message successfully sent');
+                return $response->redirect('/');
+
             }
-            return $this->render('contact', ['model' => $contactForm]);
+            $contact = new Contact();
+            return $this->render('contact', ['model' => $contact]);
         }
 
         public function handleContact(Request $request) {
