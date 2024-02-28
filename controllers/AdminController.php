@@ -13,6 +13,7 @@ use app\models\User;
 use app\repository\ContactRepository;
 use app\repository\RoleRepository;
         use app\repository\UserRepository;
+use PHPMailer\PHPMailer\PHPMailer;
 
     class AdminController extends Controller
     {
@@ -50,9 +51,15 @@ use app\repository\RoleRepository;
                     return $this->render('/admin/admin-createUser', ['model'=>$user]);
                 }
                 $user->unsetErrorArray();
+                $unhashedPassword = $user->password;
                 $hashedPassword = $this->userRepo->hashPassword($user->password);
                 $user->password = $hashedPassword;
                 if($this->userRepo->save($user))
+                if(!self::sendMail($user, $unhashedPassword))
+                {
+                Application::$app->session->setFlash('error', 'Mail not sent to new user');
+                return $response->redirect('/admin/admin-home');
+                }
                 Application::$app->session->setFlash('success', 'User created successfully');
                 return $response->redirect('/admin/admin-home');
             }
@@ -160,6 +167,39 @@ use app\repository\RoleRepository;
             $this->contactRepo->update($message);
             Application::$app->session->setFlash('success', 'Message marked as read');
             return $response->redirect('/admin/admin-home');
+        }
+
+
+        public static function sendMail(User $user, string $unhashedPassword)
+        {
+            $mail = new PHPMailer();
+            $mail->SMTPDebug = 2;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'adhikarikshitiz12@gmail.com';
+            $mail->Password = 'iiiu lvpy ysyf mdgd';  
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            $mail->setFrom('adhikarikshitiz12@gmail.com', 'Kshitiz Adhikari');
+            $mail->addAddress($user->email);
+
+            // Add CC and BCC recipients if needed
+            // $mail->addCC('cc@example.com', 'CC Name');
+            // $mail->addBCC('bcc@example.com', 'BCC Name');
+
+            $mail->Subject = 'Account Created Successfully';
+            $mail->Body    = "\n
+                                FirstName:$user->firstName\n
+                                LastName: $user->lastName\n
+                                Email: $user->email\n
+                                Password: $unhashedPassword\n
+                                ";
+            if(!$mail->send()) {
+                return false;
+            }
+            return true;
         }
     }
 
