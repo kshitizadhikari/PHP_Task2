@@ -51,6 +51,7 @@
     $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
     $app->router->get('/admin/admin-viewMessage',[AdminController::class, 'viewMessage']);
     $app->router->get('/admin/admin-deleteMessage',[AdminController::class, 'deleteMessage']);
+    $app->router->get('/admin/admin-markMessageRead',[AdminController::class, 'markMessageRead']);
     
 
 

@@ -6,7 +6,8 @@
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-    use app\models\User;
+use app\models\Contact;
+use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserRegisterForm;
 use app\repository\ContactRepository;
@@ -118,6 +119,19 @@ use app\repository\RoleRepository;
         }
 
         //for the contact
+        public function viewMessage(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $message_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $message = new Contact();
+            $message = $this->contactRepo->findById($message_id); 
+            if(!$message) {
+                Application::$app->session->setFlash('error', 'Message view error');
+                return $response->redirect('/admin/admin-home');
+            }
+            return $this->render('/admin/admin-viewMessage', ['message' => $message]);
+        }
+
         public function deleteMessage(Request $request, Response $response)
         {
             $requestData = $request->getBody();
@@ -130,7 +144,17 @@ use app\repository\RoleRepository;
             return $response->redirect('/admin/admin-home');
         }
 
-
+        public function markMessageRead(Request $request, Response $response) {
+            $requestData = $request->getBody();
+            $message_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $message = new Contact();
+            $message = $this->contactRepo->findById($message_id);
+            $message->status = 1;
+            $message->unsetErrorArray();
+            $this->contactRepo->update($message);
+            Application::$app->session->setFlash('success', 'Message marked as read');
+            return $response->redirect('/admin/admin-home');
+        }
     }
 
 ?>
