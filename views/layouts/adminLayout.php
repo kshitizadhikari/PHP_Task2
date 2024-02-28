@@ -33,12 +33,12 @@ use app\core\Application;
         <div class="container">
         
         <?php if(Application::$app->session->getFlash('success')): ?>
-            <div class="alert alert-success">
+            <div class="alert alert-success" role="alert">
                 <?php echo Application::$app->session->getFlash('success') ?>
             </div>
         <?php endif; ?>
         <?php if(Application::$app->session->getFlash('error')): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
                 <?php echo Application::$app->session->getFlash('error') ?>
             </div>
         <?php endif; ?>

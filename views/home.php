@@ -5,7 +5,9 @@
  */
 $this->title = 'Home Page';
 ?>
-<h1>Home</h1>
+<div class="mb-5">
+    <h1>Home</h1>
+</div>
 
 <?php if($allBlogs != null): ?>
     <div class="mb-3">
