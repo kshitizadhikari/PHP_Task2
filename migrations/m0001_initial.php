@@ -24,10 +24,10 @@
             $sql = "
                     CREATE TABLE users (
                         id INT AUTO_INCREMENT PRIMARY KEY,
-                        firstName VARCHAR(255) NOT NULL,
-                        lastName VARCHAR(255) NOT NULL,
-                        email VARCHAR(255) NOT NULL,
-                        password VARCHAR(255) NOT NULL,
+                        firstName VARCHAR(50) NOT NULL,
+                        lastName VARCHAR(50) NOT NULL,
+                        email VARCHAR(100) NOT NULL,
+                        password VARCHAR(100) NOT NULL,
                         role_id INT DEFAULT 4,
                         status TINYINT NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -57,14 +57,27 @@
             $sql = "
                 CREATE TABLE blogs (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    title VARCHAR(255) NOT NULL,
+                    title VARCHAR(100) NOT NULL,
                     description TEXT NOT NULL,
                     featured_img VARCHAR(255),
                     user_id INT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     status TINYINT NOT NULL,
-                    FOREIGN KEY (user_id) REFERENCES users(id)
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=INNODB;
+            ";
+
+            $db->pdo->exec($sql);
+
+
+            $sql = "
+                CREATE TABLE contacts (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    email VARCHAR(50) NOT NULL,
+                    subject VARCHAR(100) NOT NULL,
+                    body TEXT NOT NULL,
+                    status TINYINT NOT NULL
                 ) ENGINE=INNODB;
             ";
 
@@ -74,10 +87,18 @@
         public function down()
         {
             $db = Application::$app->db;
-            $SQL = "DROP TABLE roles;";
+
+            $SQL = "DROP TABLE blogs;";
             $db->pdo->exec($SQL);
 
             $SQL = "DROP TABLE users;";
             $db->pdo->exec($SQL);
+
+            $SQL = "DROP TABLE roles;";
+            $db->pdo->exec($SQL);
+
+            $SQL = "DROP TABLE contacts;";
+            $db->pdo->exec($SQL);
+            
         }
     }
