@@ -73,6 +73,7 @@ use app\repository\RoleRepository;
                 {
                     $user->email = $postData['email'];
                     $user->role_id = $postData['role_id'];
+                    $user->status = $postData['status'];
                 }
                 $user->unsetErrorArray();
                 $this->userRepo->update($user);

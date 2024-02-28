@@ -113,6 +113,16 @@ use app\repository\BlogRepository;
                 $blog = new Blog();
                 $blog = $this->blogRepo->findById($blog_id);
                 $blog->loadData($requestData);
+                 // Move uploaded file to destination
+                    //img_components[0] stores temporary path img_components[1] stores imageName
+                    $img_components = explode("#", $blog->featured_img); 
+                    $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
+                    $img_relative_path = "/assets/images/" . $img_components[1];
+                    if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                    }   
+                    
+                    $blog->featured_img = $img_relative_path;
                 $blog->unsetErrorArray();
                 $this->blogRepo->update($blog);
                 Application::$app->session->setFlash('success', 'Blog updated successfully');

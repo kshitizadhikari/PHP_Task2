@@ -22,7 +22,10 @@ $this->title = 'Author View Blog Page';
                         Description: <?php echo $blog->description?>
                     </li>
                 </ul>
+                
+            <div class="mt-3">
                 <button class="btn btn-primary" onclick="window.location.href='/author/author-home'" >Go Back</button>
+            </div>
             </div>
         </div>
         <div class="col-md-4">

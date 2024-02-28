@@ -16,7 +16,7 @@ $this->title = 'Author Edit Blog Page';
     <?php echo $form->field($model, 'id')->hiddenField(); ?>
     <?php echo $form->field($model, 'title') ?>
     <?php echo new TextareaField($model, "description")?>
-    <?php echo $form->field($model, 'featured_img') ?>
+    <?php echo $form->field($model, 'featured_img')->fileField() ?>
     <?php echo $form->field($model, 'status') ?>
     <button type="submit" class="btn btn-primary">Update</button>
 <?php Form::end(); ?>
