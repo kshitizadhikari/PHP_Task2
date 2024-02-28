@@ -56,7 +56,6 @@ $this->title = 'Admin Home Page';
                 <th scope="col">Id</th>
                 <th scope="col">Email</th>
                 <th scope="col">Subject</th>
-                <th scope="col">Body</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
             </tr>
@@ -67,7 +66,6 @@ $this->title = 'Admin Home Page';
                     <td><?php echo $message['id'] ?></td>
                     <td><?php echo $message['email'] ?></td>
                     <td><?php echo $message['subject'] ?></td>
-                    <td><?php echo $message['body'] ?></td>
                     <td><?php echo $message['status'] ?></td>
                     <td>
                         <a href="/admin/admin-viewMessage?id=<?php echo $message['id']?>">View</a> | 
