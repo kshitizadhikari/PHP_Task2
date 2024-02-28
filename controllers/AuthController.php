@@ -27,14 +27,19 @@ use app\models\UserRegisterForm;
                 }
                 if($loginForm->validate() && $loginForm->login()) {
                     $user_role_id = Application::$app->user->role_id;
-                    if($user_role_id === 1) {
-                        $response->redirect('/admin/admin-home');
-                    } else if($user_role_id === 2) {
-                        $response->redirect('/editor/editor-home');
-                    } else if($user_role_id === 3) {
-                        $response->redirect('/author/author-home');
-                    } else if($user_role_id === 4) {
-                        $response->redirect('/user/user-home');
+                    $user_status = Application::$app->user->status;
+                    if($user_status == 1) {
+                        if($user_role_id === 1) {
+                            $response->redirect('/admin/admin-home');
+                        } else if($user_role_id === 2) {
+                            $response->redirect('/editor/editor-home');
+                        } else if($user_role_id === 3) {
+                            $response->redirect('/author/author-home');
+                        } else if($user_role_id === 4) {
+                            $response->redirect('/user/user-home');
+                        }
+                    } else {
+                        Application::$app->session->setFlash('error', 'Your account hasn\'t been activated');
                     }
                     return $this->render('login', ['model' => $loginForm]);
                 }

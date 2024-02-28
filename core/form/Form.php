@@ -20,5 +20,12 @@
         {
             return new InputField($model, $attribute); // Return an instance of Field
         }
+
+        // In your Form.php file, line 26
+        public function dropdown(Model $model, string $attribute, array $options)
+        {
+            return new DropdownMenu($model, $attribute, $options);
+        }
+
     }
 ?>

@@ -18,7 +18,10 @@ $this->title = 'Admin Edit Details Page';
     </div>
     <?php echo $form->field($model, 'email'); ?>
     <?php if($model->id !== $_SESSION['user']): ?>
-        <?php echo $form->field($model, 'status'); ?>
+        <?php echo $form->dropdown($model, 'status', [
+            'Active' => 1,
+            'Deactivate' => 0,
+        ])->render(); ?>
         <?php echo $form->field($model, 'role_id'); ?>
     <?php endif; ?>
     <button type="submit" class="btn btn-primary">Submit</button>
