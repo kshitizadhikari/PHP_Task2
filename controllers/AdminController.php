@@ -9,24 +9,28 @@
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserRegisterForm;
-    use app\repository\RoleRepository;
+use app\repository\ContactRepository;
+use app\repository\RoleRepository;
         use app\repository\UserRepository;
 
     class AdminController extends Controller
     {
-        protected $userRepo;
-        protected $roleRepo;
+        protected UserRepository $userRepo;
+        protected RoleRepository $roleRepo;
+        protected ContactRepository $contactRepo;
         
         public function __construct() {
             $this->setLayout('adminLayout');
             $this->registerMiddleWare(new AuthMiddleware(1, []));
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();
+            $this->contactRepo = new ContactRepository();
         }
 
         public function home() {
             $allUsers = $this->userRepo->findAll();
-            return $this->render('/admin/admin-home', ['allUsers' => $allUsers]);
+            $allContactMessages = $this->contactRepo->findAll();
+            return $this->render('/admin/admin-home', ['allUsers' => $allUsers, 'Messages' => $allContactMessages]);
         }
 
         public function profile() {
@@ -112,6 +116,21 @@
             Application::$app->session->setFlash('success', 'Password changes successfully');
             return $response->redirect('/admin/admin-home');
         }
+
+        //for the contact
+        public function deleteMessage(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $contact_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            if($this->contactRepo->delete($contact_id)) {
+                Application::$app->session->setFlash('success', 'Message deleted successfully');
+            } else {
+                Application::$app->session->setFlash('error', 'Message deletion unsuccessful');
+            }
+            return $response->redirect('/admin/admin-home');
+        }
+
+
     }
 
 ?>

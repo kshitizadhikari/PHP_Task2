@@ -49,6 +49,9 @@
     $app->router->post('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
     $app->router->post('/admin/admin-changePassword',[AdminController::class, 'changePassword']);
     $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
+    $app->router->get('/admin/admin-viewMessage',[AdminController::class, 'viewMessage']);
+    $app->router->get('/admin/admin-deleteMessage',[AdminController::class, 'deleteMessage']);
+    
 
 
     //author routes

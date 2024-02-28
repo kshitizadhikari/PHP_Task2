@@ -10,6 +10,7 @@ $this->title = 'Admin Home Page';
     <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createUser'">Create User</button>
 </div>
 
+<div class="mb-5">
 <table class="table table-dark table-striped table-hover">
     <?php if($allUsers != null): ?>
         <thead>
@@ -35,6 +36,42 @@ $this->title = 'Admin Home Page';
                     <td>
                         <a href="/admin/admin-editDetails?id=<?php echo $user['id']?>">Edit</a> | 
                         <a href="/admin/admin-deleteUser?id=<?php echo $user['id']?>">Delete</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    <?php endif; ?>
+</table>
+</div>
+
+
+
+<?php if($Messages != null): ?>
+    <div class="mb-3">
+        <h3>Contact Messages</h3>
+    </div>
+    <thead>
+            <table class="table table-dark table-striped table-hover">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Email</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Body</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($Messages as $message): ?>
+                <tr>
+                    <td><?php echo $message['id'] ?></td>
+                    <td><?php echo $message['email'] ?></td>
+                    <td><?php echo $message['subject'] ?></td>
+                    <td><?php echo $message['body'] ?></td>
+                    <td><?php echo $message['status'] ?></td>
+                    <td>
+                        <a href="/admin/admin-viewMessage?id=<?php echo $message['id']?>">View</a> | 
+                        <a href="/admin/admin-deleteMessage?id=<?php echo $message['id']?>">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
