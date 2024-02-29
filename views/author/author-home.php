@@ -6,8 +6,16 @@
 $this->title = 'Author Home Page';
 ?>
 <h1>Author Home</h1>
-<div class="mb-3">
-    <button class="btn btn-primary" onclick="window.location.href='/author/author-createBlog'">Create Blog</button>
+<div class="row mb-3">
+    <div class="col-9">
+        <button class="btn btn-primary" onclick="window.location.href='/author/author-createBlog'">Create Blog</button>
+    </div>
+    <div class="col-3">
+            <form class="d-flex" role="search" action="" method="get">
+                <input class="form-control me-2" type="search" placeholder="Enter Title" aria-label="Search" name="search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
 </div>
 
 <table class="table table-dark table-striped table-hover">

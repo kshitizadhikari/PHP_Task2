@@ -29,8 +29,14 @@
             $this->blogRepo = new BlogRepository();
         }
 
-        public function home() {
-            $allBlogs = $this->blogRepo->findAll();
+        public function home(Request $request) {
+            if(isset($request->getBody()['search']))
+            {
+                $blogTitle = $request->getBody()['search'] . "%";
+                $allBlogs = $this->blogRepo->searchBlogs($blogTitle);
+            } else {
+                    $allBlogs = $this->blogRepo->findAll();
+            }
             return $this->render('/author/author-home', ['allBlogs' => $allBlogs]);
         }
 
