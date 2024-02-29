@@ -108,6 +108,7 @@ abstract class Model
             self::RULE_MAX => 'Max length of this field is {max}',
             self::RULE_MATCH => 'This field must match the "{match}" field',
             self::RULE_UNIQUE => 'Record with this {field} already exists',
+
         ];
     }
 

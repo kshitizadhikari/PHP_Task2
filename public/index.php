@@ -39,6 +39,8 @@
     $app->router->get('/user/user-profile',[UserController::class, 'profile']);
     $app->router->get('/user/user-editDetails',[UserController::class, 'editDetails']);
     $app->router->post('/user/user-editDetails',[UserController::class, 'editDetails']);
+    $app->router->get('/user/user-changePassword', [UserController::class, 'changePassword']);
+    $app->router->post('/user/user-changePassword',[UserController::class, 'changePassword']);
 
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
@@ -48,6 +50,8 @@
     $app->router->get('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
     $app->router->post('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
     $app->router->post('/admin/admin-changePassword',[AdminController::class, 'changePassword']);
+    $app->router->get('/admin/admin-changeSelfPassword',[AdminController::class, 'changeSelfPassword']);
+    $app->router->post('/admin/admin-changeSelfPassword',[AdminController::class, 'changeSelfPassword']);
     $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
     $app->router->get('/admin/admin-viewMessage',[AdminController::class, 'viewMessage']);
     $app->router->get('/admin/admin-deleteMessage',[AdminController::class, 'deleteMessage']);

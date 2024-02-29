@@ -6,24 +6,25 @@
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-use app\models\Contact;
-use app\models\User;
+    use app\models\Contact;
+    use app\models\User;
     use app\models\UserEditDetailsForm;
-    use app\models\UserRegisterForm;
+use app\models\UserEditPasswordForm;
 use app\repository\ContactRepository;
-use app\repository\RoleRepository;
-        use app\repository\UserRepository;
-use PHPMailer\PHPMailer\PHPMailer;
+    use app\repository\RoleRepository;
+    use app\repository\UserRepository;
+    use PHPMailer\PHPMailer\PHPMailer;
 
     class AdminController extends Controller
     {
         protected UserRepository $userRepo;
         protected RoleRepository $roleRepo;
         protected ContactRepository $contactRepo;
+        protected const ADMIN_ROLE = 1;
         
         public function __construct() {
             $this->setLayout('adminLayout');
-            $this->registerMiddleWare(new AuthMiddleware(1, []));
+            $this->registerMiddleWare(new AuthMiddleware(self::ADMIN_ROLE, []));
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();
             $this->contactRepo = new ContactRepository();
@@ -113,6 +114,33 @@ use PHPMailer\PHPMailer\PHPMailer;
                 Application::$app->session->setFlash('error', 'user deletion unsuccessful');
             }
             return $response->redirect('/admin/admin-home');
+        }
+
+        public function changeSelfPassword(Request $request, Response $response)
+        {
+            if($request->isPost())
+            {
+                $pwObj = new UserEditPasswordForm();
+                $pwObj->loadData($request->getBody());
+                if(!$pwObj->validate() || !$pwObj->checkPassword())
+                {
+                    return $this->render('/admin/admin-changeSelfPassword', ['model' => $pwObj]);
+                }
+                $user = new User();
+                $user = $this->userRepo->findById($_SESSION['user']);
+                $newHashedPassword = $this->userRepo->hashPassword($pwObj->newPassword);
+                $user->password = $newHashedPassword;
+                $user->unsetErrorArray();
+                if(!$this->userRepo->update($user)) {
+                    Application::$app->session->setFlash('error', 'Password change unsuccessful');
+                    return;
+                }
+                Application::$app->session->setFlash('success', 'Password changes successfully');
+                return $response->redirect('/admin/admin-home');
+            }
+
+            $pwObj = new UserEditPasswordForm();
+            return $this->render('/admin/admin-changeSelfPassword', ['model' => $pwObj]);
         }
 
         public function changePassword(Request $request, Response $response)

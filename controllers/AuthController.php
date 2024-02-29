@@ -6,8 +6,8 @@
     use app\core\Request;
     use app\core\Response;
     use app\models\LoginForm;
-use app\models\User;
-use app\models\UserRegisterForm;
+    use app\models\User;
+    use app\models\UserRegisterForm;
     use app\repository\UserRepository;
 
     class AuthController extends Controller

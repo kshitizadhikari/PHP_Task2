@@ -51,15 +51,19 @@ $this->title = 'Admin Edit Details Page';
                         <?php endif; ?>
                     </div>
                     <!-- <p class="small mb-3 pb-lg-1"><a class="text-white-50" href="#!">Forgot password?</a></p> -->
-                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Update</button>
+                        <button class="btn btn-outline-light btn-lg px-5" type="submit">Update</button>
                 </div>
                 <?php app\core\form\Form::end(); ?>
                 <div>
                     <p class="mb-0">
                         <button class="btn btn-primary" onclick="window.location.href='/admin/admin-profile'">Go Back</button>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePwModal">
+                        <?php if($model->id == $_SESSION['user']): ?>
+                            <button class="btn btn-primary" onclick="window.location.href='/admin/admin-changeSelfPassword?id=<?php echo $_SESSION['user']?>'">Change Password</button>
+                        <?php else: ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePwModal">
                             Change Password
-                        </button>
+                            </button>
+                        <?php endif; ?>
                     </p>
                 </div>
             </div>
@@ -84,7 +88,6 @@ $this->title = 'Admin Edit Details Page';
                 <?php $form = Form::begin('/admin/admin-changePassword', "post") ?>
                     <?php echo $form->field($model, 'id')->hiddenField(); ?>
                     <?php echo $form->field($model, 'password')->passwordField(); ?>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

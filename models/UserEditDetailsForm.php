@@ -1,23 +1,20 @@
 <?php
     namespace app\models;
-    use app\core\Application;
-    use app\core\Model;
-    use app\repository\UserRepository;
 
-    class UserEditDetailsForm extends Model
+    class UserEditDetailsForm extends User
     {
         public int $id;
         public string $firstName = '';
         public string $lastName = '';
         public string $email = '';
-        public string $status = '';
-        public string $role_id = '';
+        public int $status;
+        public int $role_id;
 
         public function rules(): array {
             return [
                 'firstName' => [self::RULE_REQUIRED, ],
                 'lastName' =>[self::RULE_REQUIRED],
-                'email' =>[self::RULE_REQUIRED, self::RULE_EMAIL],
+                'email' =>[self::RULE_REQUIRED, self::RULE_EMAIL, [self::RULE_UNIQUE, 'class' => self::class]],
             ];
         }
 

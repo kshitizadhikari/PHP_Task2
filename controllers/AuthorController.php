@@ -9,9 +9,8 @@
     use app\models\Blog;
     use app\models\User;
     use app\models\UserEditDetailsForm;
-use app\models\UserEditPassword;
-use app\models\UserEditPasswordForm;
-use app\repository\BlogRepository;
+    use app\models\UserEditPasswordForm;
+    use app\repository\BlogRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
 
@@ -20,11 +19,11 @@ use app\repository\BlogRepository;
         protected $userRepo;
         protected $roleRepo;
         protected $blogRepo;
-        protected $role_id = 3;
+        protected const AUTHOR_ROLE = 3;
         
         public function __construct() {
             $this->setLayout('authorLayout');
-            $this->registerMiddleWare(new AuthMiddleware($this->role_id, []));
+            $this->registerMiddleWare(new AuthMiddleware(self::AUTHOR_ROLE, []));
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();
             $this->blogRepo = new BlogRepository();

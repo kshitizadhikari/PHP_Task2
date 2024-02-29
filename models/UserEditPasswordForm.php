@@ -3,8 +3,6 @@
 
 use app\core\Application;
 use app\core\Model;
-use app\core\Request;
-use app\repository\UserRepository;
 
     class UserEditPasswordForm extends Model
     {
