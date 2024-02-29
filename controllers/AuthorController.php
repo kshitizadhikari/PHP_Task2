@@ -35,9 +35,24 @@
                 $blogTitle = $request->getBody()['search'] . "%";
                 $allBlogs = $this->blogRepo->searchBlogs($blogTitle);
             } else {
-                    $allBlogs = $this->blogRepo->findAll();
+                $allBlogs = $this->blogRepo->findAll();
             }
+            $sortBy = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'id';
+            $sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
+        
+            // Perform sorting based on the selected column and order
+            usort($allBlogs, function($a, $b) use ($sortBy, $sortOrder) {
+                if($a[$sortBy] == $b[$sortBy]) {
+                    return 0;
+                }
+                return ($sortOrder == 'ASC') ? ($a[$sortBy] < $b[$sortBy] ? -1 : 1) : ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
+            });
             return $this->render('/author/author-home', ['allBlogs' => $allBlogs]);
+        }
+
+        public function arrange($items, $sortBy, $sortOrder)
+        {
+
         }
 
         public function profile() {

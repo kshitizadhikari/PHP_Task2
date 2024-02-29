@@ -10,17 +10,33 @@ $this->title = 'Home Page';
 </div>
 
 <?php if($allBlogs != null): ?>
-    <div class="row mb-3">
-        <div class="col-9">
+    <div class="row mb-3 d-flex">
+        <div class="col-5 p-3">
             <h3>All Blogs</h3>
         </div>
-        <div class="col-3">
-            <form class="d-flex" role="search" action="" method="get">
-                <input class="form-control me-2" type="search" placeholder="Enter Title" aria-label="Search" name="search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+        <div class="col-7 d-flex flex-row-reverse p-3 align-items-center">
+        <form role="search" action="" method="get" class="d-flex">
+            <div class="mr-2">
+                <select class="form-control" id="sort_by" name="sort_by">
+                    <option value="id">Id</option>
+                    <option value="title">Title</option>
+                    <!-- Add options for other columns -->
+                </select>
+            </div>
+            <div class="mr-2">
+                <select class="form-control" id="sort_order" name="sort_order">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+            </div>
+            <div class="mr-2">
+                <input class="form-control" type="search" placeholder="Enter Title" aria-label="Search" name="search">
+            </div>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
         </div>
     </div>
+
 
     <div class="mb-3">
         <table class="table table-dark table-striped table-hover">
