@@ -7,8 +7,20 @@ $this->title = 'Admin Home Page';
 ?>
 <h1>Admin Home</h1>
 <div class="mb-3">
-    <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createUser'">Create User</button>
+    <div class="row">
+        <div class="col-9">
+            <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createUser'">Create User</button>
+        </div>
+        <div class="col-3">
+            <form class="d-flex" role="search" action="" method="get">
+                <input class="form-control me-2" type="search" placeholder="Enter FirstName" aria-label="Search" name="search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    
 </div>
+
 
 <div class="mb-5">
 <table class="table table-dark table-striped table-hover">

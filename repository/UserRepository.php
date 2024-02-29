@@ -5,9 +5,9 @@
 
     class UserRepository extends BaseRepository
     {
-        public function findByUserName($username) {
-            $sql = "SELECT * FROM $this->tableName WHERE username=?";
-            $result = $this->db->query($sql, [$username]);
+        public function findByFirstName($firstName) {
+            $sql = "SELECT * FROM $this->tableName WHERE firstName=?";
+            $result = $this->db->query($sql, [$firstName]);
             if (!empty($result)) {
                 $row = $result[0];
                 $user = ObjectMapper::mapToObject($row, 'User');
@@ -15,6 +15,12 @@
             } else {
                 return null;
             }
+        }
+
+        public function searchFirstName($firstName) {
+            $sql = "SELECT * FROM $this->tableName WHERE firstName LIKE ?";
+            $result = $this->db->query($sql, [$firstName]);
+            return $result;
         }
 
         public function findByUserEmail($email) {

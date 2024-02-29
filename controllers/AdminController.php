@@ -9,8 +9,8 @@
     use app\models\Contact;
     use app\models\User;
     use app\models\UserEditDetailsForm;
-use app\models\UserEditPasswordForm;
-use app\repository\ContactRepository;
+    use app\models\UserEditPasswordForm;
+    use app\repository\ContactRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
     use PHPMailer\PHPMailer\PHPMailer;
@@ -30,10 +30,24 @@ use app\repository\ContactRepository;
             $this->contactRepo = new ContactRepository();
         }
 
-        public function home() {
-            $allUsers = $this->userRepo->findAll();
+        public function home(Request $request, Response $response) {
+            // Check if there is a search query
+            if(isset($request->getBody()['search'])) {
+                $searchQuery = $request->getBody()['search'] . "%";
+                $allUsers = $this->userRepo->searchFirstName($searchQuery);
+            } else {
+                // Load all users if no search query
+                $allUsers = $this->userRepo->findAll();
+            }
             $allContactMessages = $this->contactRepo->findAll();
             return $this->render('/admin/admin-home', ['allUsers' => $allUsers, 'Messages' => $allContactMessages]);
+        }
+        
+
+        public function searchUser(Request $request) {
+            $searchUser = '';
+            $searchUser = $request->getBody()['search'] . '%';
+            $users = $this->userRepo->searchFirstName($searchUser);
         }
 
         public function profile() {

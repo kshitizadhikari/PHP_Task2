@@ -45,6 +45,7 @@
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
     $app->router->get('/admin/admin-profile',[AdminController::class, 'profile']);
+    $app->router->get('/admin/admin-searchUser',[AdminController::class, 'searchUser']);
     $app->router->get('/admin/admin-createUser',[AdminController::class, 'createUser']);
     $app->router->post('/admin/admin-createUser',[AdminController::class, 'createUser']);
     $app->router->get('/admin/admin-editDetails',[AdminController::class, 'editDetails']);
