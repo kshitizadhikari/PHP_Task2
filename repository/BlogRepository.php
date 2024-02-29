@@ -13,4 +13,10 @@
         {
             return 'Blog';
         }
+
+        public function searchBlogs($title) {
+            $sql = "SELECT * FROM $this->tableName WHERE title LIKE ?";
+            $result = $this->db->query($sql, [$title]);
+            return $result;
+        }
     }

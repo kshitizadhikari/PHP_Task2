@@ -19,8 +19,14 @@ use app\repository\ContactRepository;
             $this->contactRepo = new ContactRepository();
         }
         
-        public function home() {
-            $allBlogs = $this->blogRepo->findAll();
+        public function home(Request $request) {
+            if(isset($request->getBody()['search'])) {
+                $searchQuery = $request->getBody()['search'] . "%";
+                $allBlogs = $this->blogRepo->searchBlogs($searchQuery);
+            } else {
+                // Load all users if no search query
+                $allBlogs = $this->blogRepo->findAll();
+            }
             return $this->render('home', ['allBlogs' => $allBlogs]);
         }
 

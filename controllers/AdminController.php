@@ -42,13 +42,6 @@
             $allContactMessages = $this->contactRepo->findAll();
             return $this->render('/admin/admin-home', ['allUsers' => $allUsers, 'Messages' => $allContactMessages]);
         }
-        
-
-        public function searchUser(Request $request) {
-            $searchUser = '';
-            $searchUser = $request->getBody()['search'] . '%';
-            $users = $this->userRepo->searchFirstName($searchUser);
-        }
 
         public function profile() {
             $user = Application::$app->user;
