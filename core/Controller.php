@@ -22,6 +22,10 @@ use app\core\middlewares\BaseMiddleware;
             return Application::$app->view->renderView($view, $params);
         }
 
+        public function renderPartialView($view, $params = []) {
+            return Application::$app->view->renderOnlyView($view, $params);
+        }
+
         public function registerMiddleware(BaseMiddleware $middleware)
         {
             $this->middlewares[] = $middleware;

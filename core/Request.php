@@ -33,6 +33,14 @@
         public function hasfile(string $key): bool {
             return isset($_FILES[$key]) && $_FILES[$key]['error'] === UPLOAD_ERR_OK;
         }
+
+        public function isAjax(): bool
+        {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                return true;
+            }
+            return false;
+        }
         
         public function getBody()
         {
