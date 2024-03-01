@@ -21,6 +21,8 @@
         protected RoleRepository $roleRepo;
         protected ContactRepository $contactRepo;
         protected const ADMIN_ROLE = 1;
+        protected const ROW_START = 0;
+        protected const ROW_LIMIT = 2;
         
         public function __construct() {
             $this->setLayout('adminLayout');
@@ -31,16 +33,37 @@
         }
 
         public function home(Request $request, Response $response) {
-            // Check if there is a search query
-            if(isset($request->getBody()['search'])) {
-                $searchQuery = $request->getBody()['search'] . "%";
-                $allUsers = $this->userRepo->searchFirstName($searchQuery);
-            } else {
-                // Load all users if no search query
-                $allUsers = $this->userRepo->findAll();
+            $searchTerm = $request->getBody()['search'] ?? null;
+            $currentUserPage = 1; // Default to the first page
+            $newUserPage = 0; // Start index for SQL query
+            
+            // Adjust current page and start index based on the request
+            if (isset($request->getBody()['userPage'])) {
+                $currentUserPage = (int)$request->getBody()['userPage'];
+                $newUserPage = ($currentUserPage - 1) * self::ROW_LIMIT;
             }
+            
+            // Handle search functionality
+            if ($searchTerm) {
+                $searchTerm = "$searchTerm";
+                $users = $this->userRepo->searchWithPagination('firstName', $searchTerm, $newUserPage, self::ROW_LIMIT);
+            } else {
+                //if no search return the first set of data
+                $users = $this->userRepo->findWithLimit($newUserPage, self::ROW_LIMIT);
+            }
+
+            $totalUserPages = $this->userRepo->findTotalPages(self::ROW_LIMIT);
+            // Handling AJAX requests differently
+            if ($request->isAjax()) {
+                // Assuming there's a separate view for the table to be included in AJAX response
+                return $this->renderPartialView('../views/admin/ajax-partialViews/user_table', [
+                    'allUsers' => $users,
+                    'userPageNum' => $currentUserPage,
+                    'totalUserPage' => $totalUserPages
+                ]);
+            } 
             $allContactMessages = $this->contactRepo->findAll();
-            return $this->render('/admin/admin-home', ['allUsers' => $allUsers, 'Messages' => $allContactMessages]);
+            return $this->render('/admin/admin-home', ['allUsers' => $users, 'userPageNum'=>$currentUserPage, 'totalUserPage' => $totalUserPages, 'allMessages' => $allContactMessages]);
         }
 
         public function profile() {

@@ -98,5 +98,17 @@ use PDO;
             return $result;
         }
 
+        public function searchWithPagination($columnName, $searchTerm, $offset, $limit) {
+            $sql = "SELECT * FROM $this->tableName WHERE $columnName LIKE :searchTerm LIMIT :offset, :limit";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(":searchTerm", '%' . $searchTerm . '%');
+            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
+            $statement->bindValue(":limit", $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+        
+
     }
 ?>

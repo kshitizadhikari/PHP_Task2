@@ -5,11 +5,6 @@
  */
 $this->title = 'Home Page';
 ?>
-    <script
-        src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-        crossorigin="anonymous"
-    ></script>
 <div class="mb-5">
     <h1>Home</h1>
 </div>
@@ -29,7 +24,6 @@ $this->title = 'Home Page';
         </div>
     </div>
     <?php if($allBlogs != null): ?>
-
     <div class="mb-3" id="tableData">
         <table class="table table-dark table-striped table-hover">
             <thead>
@@ -59,7 +53,7 @@ $this->title = 'Home Page';
         <nav aria-label="Page navigation example">  
             <ul class="pagination" id="pagination">
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=1">First</a></li>
-                <?php if(isset($blogPageNum) && $blogPageNum >= 1): ?>
+                <?php if(isset($blogPageNum) && $blogPageNum > 1): ?>
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=<?php echo $blogPageNum?>">Previous</a></li>
                 <?php else:?>
                 <li class="page-item"><a class="page-link" id="page-link">Previous</a></li>

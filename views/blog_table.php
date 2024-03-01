@@ -28,7 +28,7 @@
         <nav aria-label="Page navigation example">  
             <ul class="pagination" id="pagination">
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=1">First</a></li>
-                <?php if(isset($blogPageNum) && $blogPageNum >= 1): ?>
+                <?php if(isset($blogPageNum) && $blogPageNum > 1): ?>
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=<?php echo $blogPageNum-1?>">Previous</a></li>
                 <?php else:?>
                 <li class="page-item"><a class="page-link" id="page-link">Previous</a></li>

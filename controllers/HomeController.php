@@ -26,7 +26,7 @@ use app\repository\UserRepository;
         }
         
         public function home(Request $request) {
-            $searchParam = $request->getBody()['search'] ?? null;
+            $searchTerm = $request->getBody()['search'] ?? null;
             $currentBlogPage = 1; // Default to the first page
             $newBlogStart = 0; // Start index for SQL query
             
@@ -37,11 +37,13 @@ use app\repository\UserRepository;
             }
             
             // Handle search functionality
-            if ($searchParam) {
-                $searchParam = "$searchParam%";
-                $allBlogs = $this->blogRepo->searchBlogs($searchParam, $newBlogStart, self::ROW_LIMIT);
-
-            } 
+            if ($searchTerm) {
+                $searchTerm = "$searchTerm";
+                $allBlogs = $this->blogRepo->searchWithPagination('title', $searchTerm, $newBlogStart, self::ROW_LIMIT);
+            } else {
+                //if no search return the first set of data
+                $allBlogs = $this->blogRepo->findWithLimit($newBlogStart, self::ROW_LIMIT);
+            }
 
             $totalBlogPages = $this->blogRepo->findTotalPages(self::ROW_LIMIT);
             // Handling AJAX requests differently
