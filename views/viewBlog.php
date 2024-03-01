@@ -21,6 +21,12 @@ $this->title = 'Home View Blog Page';
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         Description: <?php echo $blog->description?>
                     </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Author: <?php echo $author->firstName . "  " . $author->lastName?> 
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Author Email: <?php echo $author->email?> 
+                    </li>
                 </ul>
                 <div class="mt-3">
                 <button class="btn btn-primary" onclick="window.location.href='/'" >Go Back</button>

@@ -9,17 +9,20 @@ use app\models\Blog;
 use app\models\Contact;
 use app\repository\BlogRepository;
 use app\repository\ContactRepository;
+use app\repository\UserRepository;
 
     class HomeController extends Controller
     {
         protected BlogRepository $blogRepo;
         protected ContactRepository $contactRepo;
+        protected UserRepository $userRepo;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
 
         public function __construct() {
             $this->blogRepo = new BlogRepository();
             $this->contactRepo = new ContactRepository();
+            $this->userRepo = new UserRepository();
         }
         
         public function home(Request $request) {
@@ -37,10 +40,9 @@ use app\repository\ContactRepository;
             if ($searchParam) {
                 $searchParam = "$searchParam%";
                 $allBlogs = $this->blogRepo->searchBlogs($searchParam, $newBlogStart, self::ROW_LIMIT);
-            } else {
-                $allBlogs = $this->blogRepo->findWithLimit($newBlogStart, self::ROW_LIMIT);
-            }
-            
+
+            } 
+
             $totalBlogPages = $this->blogRepo->findTotalPages(self::ROW_LIMIT);
             // Handling AJAX requests differently
             if ($request->isAjax()) {
@@ -88,12 +90,13 @@ use app\repository\ContactRepository;
             $requestData = $request->getBody();
             $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
             $blog = new Blog();
-            $blog = $this->blogRepo->findById($blog_id); 
+            $blog = $this->blogRepo->findById($blog_id);
+            $author = $this->userRepo->findById($blog->user_id);
             if(!$blog) {
                 Application::$app->session->setFlash('error', 'Blog view error');
                 return $response->redirect('/');
             }
-            return $this->render('viewBlog', ['blog' => $blog]);
+            return $this->render('viewBlog', ['blog' => $blog, 'author' => $author]);
         }
     }
 

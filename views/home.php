@@ -20,19 +20,7 @@ $this->title = 'Home Page';
         </div>
         <div class="col-7 d-flex flex-row-reverse p-3 align-items-center">
         <form role="search" action="" method="get" class="d-flex">
-            <div class="mr-2">
-                <select class="form-control" id="sort_by" name="sort_by">
-                    <option value="id">Id</option>
-                    <option value="title">Title</option>
-                    <!-- Add options for other columns -->
-                </select>
-            </div>
-            <div class="mr-2">
-                <select class="form-control" id="sort_order" name="sort_order">
-                    <option value="ASC">Ascending</option>
-                    <option value="DESC">Descending</option>
-                </select>
-            </div>
+            
             <div class="mr-2">
                 <input class="form-control" type="search" placeholder="Enter Title" aria-label="Search" name="search">
             </div>
