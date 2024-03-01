@@ -35,6 +35,7 @@ $this->title = 'Home Page';
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
         </div>
+        
     </div>
 
 
@@ -65,3 +66,22 @@ $this->title = 'Home Page';
         </table>
     </div>
 <?php endif; ?>
+<nav aria-label="Page navigation example">  
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="?blogPage=1">First</a></li>
+                <?php if(isset($blogPageNum) && $blogPageNum >= 1): ?>
+                <li class="page-item"><a class="page-link" href="?blogPage=<?php echo $blogPageNum?>">Previous</a></li>
+                <?php else:?>
+                <li class="page-item"><a class="page-link">Previous</a></li>
+                <?php endif; ?>
+                <?php for($i=2; $i<$totalBlogPages; $i++): ?>
+                <li class="page-item"><a class="page-link" href="?blogPage=<?php echo $i?>"><?php echo $i ?></a></li>
+                <?php endfor; ?>
+                <?php if(isset($blogPageNum) && $blogPageNum < $totalBlogPages-1): ?>
+                <li class="page-item"><a class="page-link" href="?blogPage=<?php echo $blogPageNum+2?>">Next</a></li>
+                <?php else:?>
+                <li class="page-item"><a class="page-link">Next</a></li>
+                <?php endif; ?>
+                <li class="page-item"><a class="page-link" href="?blogPage=<?php echo $totalBlogPages ?>">Last</a></li>
+            </ul>
+        </nav>

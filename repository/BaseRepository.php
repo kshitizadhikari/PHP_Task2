@@ -3,6 +3,7 @@
 
 use app\core\Application;
 use app\core\db\Database;
+use PDO;
 
     abstract class BaseRepository extends IBaseRepository
     {
@@ -37,8 +38,8 @@ use app\core\db\Database;
             } else {
                 return null;
             }
-
         }
+
 
         public function findAll()
         {
@@ -46,6 +47,29 @@ use app\core\db\Database;
             $result = $this->db->query($sql); //return associative array
             return $result;
         }
+
+        public function findWithLimit($offset, $limit)
+        {
+            $sql = "SELECT * FROM $this->tableName LIMIT :offset, :limitt";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $statement->bindValue(':limitt', $limit, PDO::PARAM_INT);
+            $statement->execute();
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function findTotalPages($limit)
+        {
+            $sql = "SELECT * FROM $this->tableName";
+            $statement = $this->db->prepare($sql);
+            $statement->execute();
+            $total_rows = $statement->rowCount();
+            $totalPageNum = ceil($total_rows/$limit);
+            return $totalPageNum;
+
+        }
+
 
         public function update($obj)
         {

@@ -14,6 +14,8 @@ use app\repository\ContactRepository;
     {
         protected BlogRepository $blogRepo;
         protected ContactRepository $contactRepo;
+        protected const ROW_START = 0;
+        protected const ROW_LIMIT = 5;
         public function __construct() {
             $this->blogRepo = new BlogRepository();
             $this->contactRepo = new ContactRepository();
@@ -23,21 +25,29 @@ use app\repository\ContactRepository;
             if(isset($request->getBody()['search'])) {
                 $searchQuery = $request->getBody()['search'] . "%";
                 $allBlogs = $this->blogRepo->searchBlogs($searchQuery);
+
             } else {
                 // Load all users if no search query
-                $allBlogs = $this->blogRepo->findAll();
-            }
-            $sortBy = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'id';
-            $sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
-        
-            // Perform sorting based on the selected column and order
-            usort($allBlogs, function($a, $b) use ($sortBy, $sortOrder) {
-                if($a[$sortBy] == $b[$sortBy]) {
-                    return 0;
+                $currentBlogPage = self::ROW_START;
+                $newBlogStart = $currentBlogPage;
+                if(isset($request->getBody()['blogPage'])){
+                    $currentBlogPage = $request->getBody()['blogPage'] - 1;
+                    $newBlogStart = $currentBlogPage * self::ROW_LIMIT;
                 }
-                return ($sortOrder == 'ASC') ? ($a[$sortBy] < $b[$sortBy] ? -1 : 1) : ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
-            });
-            return $this->render('home', ['allBlogs' => $allBlogs]);
+                $totalBlogPages = $this->blogRepo->findTotalPages(self::ROW_LIMIT);
+                $allBlogs = $this->blogRepo->findWithLimit($newBlogStart,self::ROW_LIMIT);
+            }
+            // $sortBy = isset($_GET['sort_by'])  ? $_GET['sort_by'] : 'id';
+            // $sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
+        
+            // // Perform sorting based on the selected column and order
+            // usort($allBlogs, function($a, $b) use ($sortBy, $sortOrder) {
+            //     if($a[$sortBy] == $b[$sortBy]) {
+            //         return 0;
+            //     }
+            //     return ($sortOrder == 'ASC') ? ($a[$sortBy] < $b[$sortBy] ? -1 : 1) : ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
+            // });
+            return $this->render('home', ['allBlogs' => $allBlogs, 'blogPageNum'=>$currentBlogPage, 'totalBlogPages' => $totalBlogPages]);
         }
 
         public function contact(Request $request, Response $response) {
