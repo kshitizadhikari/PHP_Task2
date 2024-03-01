@@ -20,6 +20,7 @@
         protected $roleRepo;
         protected $blogRepo;
         protected const AUTHOR_ROLE = 3;
+        protected const ROW_LIMIT = 3;
         
         public function __construct() {
             $this->setLayout('authorLayout');
@@ -30,24 +31,36 @@
         }
 
         public function home(Request $request) {
-            if(isset($request->getBody()['search']))
-            {
-                $blogTitle = $request->getBody()['search'] . "%";
-                $allBlogs = $this->blogRepo->searchBlogs($blogTitle);
-            } else {
-                $allBlogs = $this->blogRepo->findAll();
+            $searchTerm = $request->getBody()['search'] ?? null;
+            $currentBlogPage = 1; // Default to the first page
+            $newBlogStart = 0; // Start index for SQL query
+            
+            // Adjust current page and start index based on the request
+            if (isset($request->getBody()['blogPage'])) {
+                $currentBlogPage = (int)$request->getBody()['blogPage'];
+                $newBlogStart = ($currentBlogPage - 1) * self::ROW_LIMIT;
             }
-            $sortBy = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'id';
-            $sortOrder = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
-        
-            // Perform sorting based on the selected column and order
-            usort($allBlogs, function($a, $b) use ($sortBy, $sortOrder) {
-                if($a[$sortBy] == $b[$sortBy]) {
-                    return 0;
-                }
-                return ($sortOrder == 'ASC') ? ($a[$sortBy] < $b[$sortBy] ? -1 : 1) : ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
-            });
-            return $this->render('/author/author-home', ['allBlogs' => $allBlogs]);
+            
+            // Handle search functionality
+            if ($searchTerm) {
+                $searchTerm = "$searchTerm";
+                $allBlogs = $this->blogRepo->searchWithPagination('title', $searchTerm, $newBlogStart, self::ROW_LIMIT);
+            } else {
+                //if no search return the first set of data
+                $allBlogs = $this->blogRepo->findWithLimit($newBlogStart, self::ROW_LIMIT);
+            }
+
+            $totalBlogPages = $this->blogRepo->findTotalPages(self::ROW_LIMIT);
+            // Handling AJAX requests differently
+            if ($request->isAjax()) {
+                // Assuming there's a separate view for the table to be included in AJAX response
+                return $this->renderPartialView('../views/ajax-partialViews/blog_table', [
+                    'allBlogs' => $allBlogs,
+                    'blogPageNum' => $currentBlogPage,
+                    'totalBlogPages' => $totalBlogPages
+                ]);
+            } 
+            return $this->render('/author/author-home', ['allBlogs' => $allBlogs, 'blogPageNum'=>$currentBlogPage, 'totalBlogPages' => $totalBlogPages]);
         }
 
         public function arrange($items, $sortBy, $sortOrder)

@@ -1,5 +1,4 @@
 <?php if($allBlogs != null): ?>
-    <div class="mb-3" id="tableData">
         <table class="table table-dark table-striped table-hover">
             <thead>
                 <tr>
@@ -44,5 +43,4 @@
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=<?php echo $totalBlogPages ?>">Last</a></li>
             </ul>
         </nav>
-    </div>
 <?php endif; ?>

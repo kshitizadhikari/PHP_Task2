@@ -49,7 +49,7 @@ use app\repository\UserRepository;
             // Handling AJAX requests differently
             if ($request->isAjax()) {
                 // Assuming there's a separate view for the table to be included in AJAX response
-                return $this->renderPartialView('blog_table', [
+                return $this->renderPartialView('../views/ajax-partialViews/blog_table', [
                     'allBlogs' => $allBlogs,
                     'blogPageNum' => $currentBlogPage,
                     'totalBlogPages' => $totalBlogPages

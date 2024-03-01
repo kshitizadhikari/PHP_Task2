@@ -23,7 +23,7 @@ $this->title = 'Home Page';
         </form>
         </div>
     </div>
-    <?php if($allBlogs != null): ?>
+<?php if($allBlogs != null): ?>
     <div class="mb-3" id="tableData">
         <table class="table table-dark table-striped table-hover">
             <thead>

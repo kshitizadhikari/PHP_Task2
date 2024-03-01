@@ -2,7 +2,6 @@
     namespace app\models;
 
     use app\core\Model;
-
     class Blog extends Model
     {
         public int $id=0;

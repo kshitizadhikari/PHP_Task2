@@ -56,7 +56,7 @@
             // Handling AJAX requests differently
             if ($request->isAjax()) {
                 // Assuming there's a separate view for the table to be included in AJAX response
-                return $this->renderPartialView('../views/admin/ajax-partialViews/user_table', [
+                return $this->renderPartialView('../views/ajax-partialViews/user_table', [
                     'allUsers' => $users,
                     'userPageNum' => $currentUserPage,
                     'totalUserPage' => $totalUserPages
