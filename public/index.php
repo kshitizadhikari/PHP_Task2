@@ -28,6 +28,8 @@
     $app->router->get('/home/home-viewBlog', [HomeController::class, 'viewBlog']);
     $app->router->get('/contact', [HomeController::class, 'contact']);
     $app->router->post('/contact',[HomeController::class, 'contact']);
+    $app->router->get('/imageGallery',[HomeController::class, 'imageGallery']);
+    $app->router->get('/imageGallery/deleteImage',[HomeController::class, 'deleteImage']);
     $app->router->get('/login',[AuthController::class, 'login']);
     $app->router->post('/login',[AuthController::class, 'login']);
     $app->router->get('/register',[AuthController::class, 'register']);

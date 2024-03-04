@@ -25,6 +25,9 @@ use app\core\Application;
           <li class="nav-item px-3">
             <a class="nav-link" href="/contact">Contact</a>
           </li>
+          <li class="nav-item px-3">
+            <a class="nav-link" href="/imageGallery">Image Gallery</a>
+          </li>
       </ul>
       <?php if(Application::isGuest()): ?>
       <ul class="navbar-nav ms-auto d-flex flex-row">

@@ -103,6 +103,53 @@ use app\repository\UserRepository;
             }
             return $this->render('viewBlog', ['blog' => $blog, 'author' => $author]);
         }
+
+        public function imageGallery() {
+            $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
+            $imgFiles = scandir($imgDir);
+            
+            if ($imgFiles !== false) {
+                // Remove "." and ".." entries from the array
+                $imgFiles = array_diff($imgFiles, array('.', '..'));
+
+                foreach($imgFiles as $file) {
+                    $imagesWithPath[] = [
+                        'name' => $file,
+                        'path' => '/assets/images/'. $file
+                    ];                     
+                }
+            } else {
+                echo "Failed to read directory.";
+            }
+            
+            return $this->render('/imageGallery', ['images' => $imagesWithPath]);
+        }
+
+
+        public function deleteImage(Request $request, Response $response) {
+            $imgName = $request->getBody()['imgName'];
+            
+            // Specify the path to the image file
+            $imagePath = Application::$app::$ROOT_DIR . '\public\assets\images\\' . $imgName;
+            // Check if the file exists before attempting to delete it
+            if (file_exists($imagePath)) {
+                // Attempt to delete the file
+                if (unlink($imagePath)) {
+                    $response->setStatusCode(200);
+                    Application::$app->session->setFlash('success', 'Image deleted successfully');
+                    return $response->redirect('/');
+                } else {
+                    $response->setStatusCode(500);
+                    Application::$app->session->setFlash('error', 'Image couldn\'t be deleted');
+
+                }
+            } else {
+                $response->setStatusCode(404);
+            }
+        
+            return;
+        }                                                                               
+        
     }
 
 ?>

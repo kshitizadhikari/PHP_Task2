@@ -118,5 +118,6 @@ $this->title = 'Home Page';
                 }
             });
         }
+
     });
 </script>
