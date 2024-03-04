@@ -21,6 +21,9 @@ use app\core\Application;
             <li class="nav-item text-center p-3">
                 <a class="nav-link" href="/admin/admin-home">Home</a>
             </li>
+            <li class="nav-item text-center p-3">
+                <a class="nav-link" href="/admin/admin-imageGallery">Image Gallery</a>
+            </li>
         </ul>
             <ul class="navbar-nav ms-auto d-flex flex-row">
                 <li class="nav-item dropdown">

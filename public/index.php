@@ -29,7 +29,6 @@
     $app->router->get('/contact', [HomeController::class, 'contact']);
     $app->router->post('/contact',[HomeController::class, 'contact']);
     $app->router->get('/imageGallery',[HomeController::class, 'imageGallery']);
-    $app->router->get('/imageGallery/deleteImage',[HomeController::class, 'deleteImage']);
     $app->router->get('/login',[AuthController::class, 'login']);
     $app->router->post('/login',[AuthController::class, 'login']);
     $app->router->get('/register',[AuthController::class, 'register']);
@@ -59,6 +58,9 @@
     $app->router->get('/admin/admin-viewMessage',[AdminController::class, 'viewMessage']);
     $app->router->get('/admin/admin-deleteMessage',[AdminController::class, 'deleteMessage']);
     $app->router->get('/admin/admin-markMessageRead',[AdminController::class, 'markMessageRead']);
+    $app->router->get('/admin/admin-imageGallery',[AdminController::class, 'imageGallery']);
+    $app->router->get('/admin/admin-imageGallery/deleteImage',[AdminController::class, 'deleteImage']);
+
     
 
 
