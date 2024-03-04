@@ -7,15 +7,18 @@ $this->title = 'Admin Home Page';
 ?>
 
 <h1>Admin Home</h1>
-<div class="mb-3">
+<div class="mb-3 mt-5">
+    <div class="mb-3">
+            <h3>All Users</h3>
+        </div>
     <div class="row">
         <div class="col-9">
             <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createUser'">Create User</button>
         </div>
         <div class="col-3">
             <form class="d-flex" role="search" action="" method="get">
-                <input class="form-control me-2" type="search" placeholder="Enter FirstName" aria-label="Search" name="search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <input class="form-control me-2" id="firstName" type="search" placeholder="Enter FirstName" aria-label="Search" name="search">
+                <button class="btn btn-outline-success" type="submit" id="submitBtn">Search</button>
             </form>
         </div>
     </div>
@@ -173,6 +176,28 @@ $this->title = 'Admin Home Page';
                 },
                 error: function(xhr, status, error) {
                     console.error("An error occurred fetching contact data: " + status + " " + error);
+                }
+            });
+        }
+
+        $(document).on("click", "#submitBtn", function(e) {
+            e.preventDefault();
+            var firstname = $("#firstName").val();
+            console.log(firstname);
+            fetchUserSearchData(firstname);
+        })
+
+        function fetchUserSearchData(firstName)
+        {
+            $.ajax({
+                url: '/admin/admin-home',
+                method: 'GET',
+                data: {firstName: firstName},
+                success: function(data) {
+                    $("#user-tableData").html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred fetching search user data: " + status + " " + error);
                 }
             });
         }
