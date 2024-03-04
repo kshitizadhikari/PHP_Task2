@@ -49,4 +49,8 @@
             </ul>
         </nav>
     </div>
+    <?php else: ?>
+    <div>
+        <h3>User Not Found</h3>
+    </div>
     <?php endif; ?>

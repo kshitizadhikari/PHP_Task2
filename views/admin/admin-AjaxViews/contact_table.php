@@ -46,4 +46,5 @@
                 <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=<?php echo $totalContactPage ?>">Last</a></li>
             </ul>
         </nav>
+        
 <?php endif; ?>

@@ -17,9 +17,9 @@ $this->title = 'Home Page';
         <form role="search" action="" method="get" class="d-flex">
             
             <div class="mr-2">
-                <input class="form-control" type="search" placeholder="Enter Title" aria-label="Search" name="search">
+                <input class="form-control" type="search" id="searchByTitle" placeholder="Enter Title" aria-label="Search" name="search">
             </div>
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-success" id="submitBtn" type="submit">Search</button>
         </form>
         </div>
     </div>
@@ -91,6 +91,28 @@ $this->title = 'Home Page';
                 success: function(data) {
                     $("#tableData").html(data);
                 },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred: " + status + " " + error);
+                }
+            });
+        }
+
+        $(document).on("click", "#submitBtn", function(e) {
+            e.preventDefault();
+
+            var title = $("#searchByTitle").val();
+            console.log(title);
+            fetchSearchBlogData(title);
+        });
+
+        function fetchSearchBlogData(title) {
+            $.ajax({
+                url: '/',
+                method: 'GET',
+                data: {searchTitle: title},
+                success: function(data) {
+                    $("#tableData").html(data)
+                }, 
                 error: function(xhr, status, error) {
                     console.error("An error occurred: " + status + " " + error);
                 }

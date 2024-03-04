@@ -25,9 +25,9 @@ $this->title = 'Author Home Page';
                 </select>
             </div> -->
             <div class="mr-2">
-                <input class="form-control" type="search" placeholder="Enter Title" aria-label="Search" name="search">
+                <input class="form-control" type="search" id="searchByTitle" placeholder="Enter Title" aria-label="Search" name="search">
             </div>
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <button class="btn btn-outline-success" id="submitBtn" type="submit">Search</button>
         </form>
     </div>
 </div>
@@ -105,6 +105,27 @@ $this->title = 'Author Home Page';
                 success: function(data) {
                     $("#blog-tableData").html(data);
                 },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred: " + status + " " + error);
+                }
+            });
+        }
+
+        $(document).on("click", "#submitBtn", function(e) {
+            e.preventDefault();
+
+            var title = $("#searchByTitle").val();
+            fetchSearchBlogData(title);
+        });
+
+        function fetchSearchBlogData(title) {
+            $.ajax({
+                url: '/author/author-home',
+                method: 'GET',
+                data: {searchTitle: title},
+                success: function(data) {
+                    $("#blog-tableData").html(data)
+                }, 
                 error: function(xhr, status, error) {
                     console.error("An error occurred: " + status + " " + error);
                 }

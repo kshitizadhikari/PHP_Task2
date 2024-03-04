@@ -70,7 +70,7 @@
                 }
 
                 if(isset($request->getBody()['contactPage'])) {
-                    return $this->renderPartialView('../views/admin/admin-AjaxViews/contact_table', [
+                    return $this->renderPartialView('../views/admin/admin-ajaxViews/contact_table', [
                         'allMessages' => $messages,
                         'contactPageNum' => $currentContactPage,
                         'totalContactPage' => $totalContactPages,

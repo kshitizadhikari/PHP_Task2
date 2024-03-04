@@ -26,35 +26,38 @@ use app\repository\UserRepository;
         }
         
         public function home(Request $request) {
-            $searchTerm = $request->getBody()['search'] ?? null;
             $currentBlogPage = 1; // Default to the first page
-            $newBlogStart = 0; // Start index for SQL query
+            $offset = 0; // Start index for SQL query'
+            $itemsPerPage = self::ROW_LIMIT;
             
             // Adjust current page and start index based on the request
             if (isset($request->getBody()['blogPage'])) {
                 $currentBlogPage = (int)$request->getBody()['blogPage'];
-                $newBlogStart = ($currentBlogPage - 1) * self::ROW_LIMIT;
+                $offset = ($currentBlogPage - 1) * $itemsPerPage;
             }
             
-            // Handle search functionality
-            if ($searchTerm) {
-                $searchTerm = "$searchTerm";
-                $allBlogs = $this->blogRepo->searchWithPagination('title', $searchTerm, $newBlogStart, self::ROW_LIMIT);
-            } else {
-                //if no search return the first set of data
-                $allBlogs = $this->blogRepo->findWithLimit($newBlogStart, self::ROW_LIMIT);
-            }
+            $allBlogs = $this->blogRepo->findWithLimit($offset, $itemsPerPage);
 
-            $totalBlogPages = $this->blogRepo->findTotalPages(self::ROW_LIMIT);
+            $totalBlogPages = $this->blogRepo->findTotalPages($itemsPerPage);
             // Handling AJAX requests differently
             if ($request->isAjax()) {
+                if(isset($request->getBody()['searchTitle'])) {
+                    // Adjust the query based on whether there's a search term
+                    $searchTerm = $request->getBody()['searchTitle'];
+                    $blogs = $this->blogRepo->searchWithPagination('title', $searchTerm, $offset, $itemsPerPage);
+                    return $this->renderPartialView('../views/ajax-partialViews/blog_table', [                                                                                  
+                        'allBlogs' => $blogs,
+                        'blogPageNum' => $currentBlogPage,
+                        'totalBlogPages' => $totalBlogPages,
+                    ]);                         
+                }
                 // Assuming there's a separate view for the table to be included in AJAX response
                 return $this->renderPartialView('../views/ajax-partialViews/blog_table', [
                     'allBlogs' => $allBlogs,
                     'blogPageNum' => $currentBlogPage,
                     'totalBlogPages' => $totalBlogPages
                 ]);
-            } 
+            }
             return $this->render('home', ['allBlogs' => $allBlogs, 'blogPageNum'=>$currentBlogPage, 'totalBlogPages' => $totalBlogPages]);
         }
 
