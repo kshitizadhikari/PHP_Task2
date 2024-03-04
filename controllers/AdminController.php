@@ -35,36 +35,45 @@
         public function home(Request $request, Response $response) {
             $searchTerm = $request->getBody()['search'] ?? null;
             $currentUserPage = 1; // Default to the first page
-            $newUserPage = 0; // Start index for SQL query
-            
-            // Adjust current page and start index based on the request
-            if (isset($request->getBody()['userPage'])) {
-                $currentUserPage = (int)$request->getBody()['userPage'];
-                $newUserPage = ($currentUserPage - 1) * self::ROW_LIMIT;
-            }
-            
-            // Handle search functionality
-            if ($searchTerm) {
-                $searchTerm = "$searchTerm";
-                $users = $this->userRepo->searchWithPagination('firstName', $searchTerm, $newUserPage, self::ROW_LIMIT);
-            } else {
-                //if no search return the first set of data
-                $users = $this->userRepo->findWithLimit($newUserPage, self::ROW_LIMIT);
-            }
-
-            $totalUserPages = $this->userRepo->findTotalPages(self::ROW_LIMIT);
-            // Handling AJAX requests differently
+            $itemsPerPage = self::ROW_LIMIT; // Define how many items you want per page
+        
             if ($request->isAjax()) {
-                // Assuming there's a separate view for the table to be included in AJAX response
+                // When it's an AJAX request, fetch the 'userPage' from the request
+                $currentUserPage = (int)($request->getBody()['userPage'] ?? 1);
+            }
+        
+            // Calculate the offset for the SQL query based on the current page
+            $offset = ($currentUserPage - 1) * $itemsPerPage;
+        
+            // Adjust the query based on whether there's a search term
+            if ($searchTerm) {
+                $users = $this->userRepo->searchWithPagination('firstName', $searchTerm, $offset, $itemsPerPage);
+            } else {
+                $users = $this->userRepo->findWithLimit($offset, $itemsPerPage);
+            }
+        
+            // Calculate the total number of pages
+            $totalUserPages = $this->userRepo->findTotalPages($itemsPerPage);
+        
+            if ($request->isAjax()) {
+                // If it's an AJAX request, return only the necessary data for the user table
                 return $this->renderPartialView('../views/ajax-partialViews/user_table', [
                     'allUsers' => $users,
                     'userPageNum' => $currentUserPage,
-                    'totalUserPage' => $totalUserPages
+                    'totalUserPage' => $totalUserPages,
                 ]);
-            } 
-            $allContactMessages = $this->contactRepo->findAll();
-            return $this->render('/admin/admin-home', ['allUsers' => $users, 'userPageNum'=>$currentUserPage, 'totalUserPage' => $totalUserPages, 'allMessages' => $allContactMessages]);
+            } else {
+                // For a regular request, fetch additional data if needed and include the full page
+                $allContactMessages = $this->contactRepo->findAll();
+                return $this->render('/admin/admin-home', [
+                    'allUsers' => $users, 
+                    'userPageNum' => $currentUserPage, 
+                    'totalUserPage' => $totalUserPages, 
+                    'allMessages' => $allContactMessages
+                ]);
+            }
         }
+        
 
         public function profile() {
             $user = Application::$app->user;

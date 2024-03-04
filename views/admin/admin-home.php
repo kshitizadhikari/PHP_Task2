@@ -73,7 +73,7 @@ $this->title = 'Admin Home Page';
                 <?php endif; ?>
                 <li class="page-item"><a class="page-link" id="page-link" href="?userPage=<?php echo $totalUserPage ?>">Last</a></li>
             </ul>
-        </nav>
+    </nav>
 </div>
 
 
@@ -109,7 +109,7 @@ $this->title = 'Admin Home Page';
             </tbody>
         </table>
     <?php endif; ?>
-    <!-- <nav aria-label="Page navigation">  
+    <nav aria-label="Page navigation">  
         <ul class="pagination contact" id="pagination contact">
             <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=1">First</a></li>
             <?php if(isset($contactPageNum) && $contactPageNum > 1): ?>
@@ -127,7 +127,7 @@ $this->title = 'Admin Home Page';
             <?php endif; ?>
             <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=<?php echo $totalContactPage ?>">Last</a></li>
         </ul>
-    </nav> -->
+    </nav>
 </div>
 
 
@@ -140,11 +140,11 @@ $this->title = 'Admin Home Page';
             fetchUserData(userPage[1]);
         })
 
-        function fetchUserData(pageNo) {
+        function fetchUserData(userTablePageNo) {
             $.ajax({
                 url: "/admin/admin-home",
                 method: "GET",
-                data: { userPage: pageNo },
+                data: { userPage: userTablePageNo },
                 success: function(data) {
                     $("#user-tableData").html(data);
                 },
@@ -153,5 +153,23 @@ $this->title = 'Admin Home Page';
                 }
             });
         }
+        // $(document.on("click", "#pagination contact a", function(e) {
+        //     var contactPage = $(this).attr('href').split('contactPage=');
+        //     fetchContactData(contactPage);
+        // }))
+
+        // function fetchContactData(contactTableData) {
+        //     $.ajax({
+        //         url: "/admin/admin-home",
+        //         method: "GET",
+        //         data: { contactPage: contactTableData },
+        //         success: function(data) {
+        //             $("#contact-tableData").html(data);
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error("An error occurred: " + status + " " + error);
+        //         }
+        //     });
+        // }
     });
 </script>

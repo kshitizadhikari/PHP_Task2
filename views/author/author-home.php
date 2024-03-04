@@ -35,6 +35,7 @@ $this->title = 'Author Home Page';
 
 
 <div id="blog-tableData">
+<div>
     <?php if($allBlogs != null): ?>
         <table class="table table-dark table-striped table-hover">
             <thead>
@@ -46,23 +47,24 @@ $this->title = 'Author Home Page';
                     <th scope="col">Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach($allBlogs as $blog): ?>
-                    <tr>
-                        <td><?php echo $blog['id'] ?></td>
-                        <td><?php echo $blog['title'] ?></td>
-                        <td><?php echo $blog['description'] ?></td>
-                        <td><img src="<?php echo $blog['featured_img'] ?>" height="100rem" width="100rem" /></td>
-                        <td>
-                            <a href="/author/author-viewBlog?id=<?php echo $blog['id']?>">View</a>
-                            <?php if($blog['user_id'] == $_SESSION['user']): ?>
-                            | <a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | 
-                            <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
+                <tbody>
+                    <?php foreach($allBlogs as $blog): ?>
+                        <tr>
+                            <td><?php echo $blog['id'] ?></td>
+                            <td><?php echo $blog['title'] ?></td>
+                            <td><?php echo $blog['description'] ?></td>
+                            <td><img src="<?php echo $blog['featured_img'] ?>" height="100rem" width="100rem" /></td>
+                            <td>
+                                <a href="/author/author-viewBlog?id=<?php echo $blog['id']?>">View</a>
+                                <?php if($blog['user_id'] == $_SESSION['user']): ?>
+                                | <a href="/author/author-editBlog?id=<?php echo $blog['id']?>">Edit</a> | 
+                                <a href="/author/author-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            
         </table>
     <?php endif; ?>
     <nav aria-label="Page navigation example">  

@@ -54,7 +54,7 @@
             // Handling AJAX requests differently
             if ($request->isAjax()) {
                 // Assuming there's a separate view for the table to be included in AJAX response
-                return $this->renderPartialView('../views/ajax-partialViews/blog_table', [
+                return $this->renderPartialView('../views/author/ajax-partialViews/author-blogTable', [
                     'allBlogs' => $allBlogs,
                     'blogPageNum' => $currentBlogPage,
                     'totalBlogPages' => $totalBlogPages
@@ -197,11 +197,12 @@
             $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
             $blog = new Blog();
             $blog = $this->blogRepo->findById($blog_id); 
+            $author = $this->userRepo->findById($blog->user_id);
             if(!$blog) {
                 Application::$app->session->setFlash('error', 'Blog view error');
                 return $response->redirect('/author/author-home');
             }
-            return $this->render('/author/author-viewBlog', ['blog' => $blog]);
+            return $this->render('/author/author-viewBlog', ['blog' => $blog, 'author' => $author]);
         }
 
         public function changePassword(Request $request, Response $response)
