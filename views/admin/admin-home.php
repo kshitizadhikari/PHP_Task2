@@ -110,7 +110,7 @@ $this->title = 'Admin Home Page';
         </table>
     <?php endif; ?>
     <nav aria-label="Page navigation">  
-        <ul class="pagination contact" id="pagination contact">
+        <ul class="pagination" id="pagination">
             <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=1">First</a></li>
             <?php if(isset($contactPageNum) && $contactPageNum > 1): ?>
                 <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=<?php echo $contactPageNum-1?>">Previous</a></li>
@@ -133,43 +133,48 @@ $this->title = 'Admin Home Page';
 
 <script>
     $(document).ready(function() {
-        $(document).on("click", "#pagination a", function(e)
-        {
+        // Handle user pagination clicks
+        $(document).on("click", "#pagination a", function(e) {
             e.preventDefault();
-            var userPage = $(this).attr('href').split('userPage=');
-            fetchUserData(userPage[1]);
-        })
+            var pageLink = $(this).attr('href');
+            var pageType = pageLink.includes('userPage') ? 'user' : 'contact';
+            var pageNumber = pageLink.split(pageType + 'Page=')[1];
 
-        function fetchUserData(userTablePageNo) {
+            if (pageType === 'user') {
+                fetchUserData(pageNumber);
+            } else {
+                fetchContactData(pageNumber);
+            }
+        });
+
+        // Fetch user data with AJAX
+        function fetchUserData(userPage) {
             $.ajax({
                 url: "/admin/admin-home",
                 method: "GET",
-                data: { userPage: userTablePageNo },
+                data: { userPage: userPage },
                 success: function(data) {
                     $("#user-tableData").html(data);
                 },
                 error: function(xhr, status, error) {
-                    console.error("An error occurred: " + status + " " + error);
+                    console.error("An error occurred fetching user data: " + status + " " + error);
                 }
             });
         }
-        // $(document.on("click", "#pagination contact a", function(e) {
-        //     var contactPage = $(this).attr('href').split('contactPage=');
-        //     fetchContactData(contactPage);
-        // }))
 
-        // function fetchContactData(contactTableData) {
-        //     $.ajax({
-        //         url: "/admin/admin-home",
-        //         method: "GET",
-        //         data: { contactPage: contactTableData },
-        //         success: function(data) {
-        //             $("#contact-tableData").html(data);
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error("An error occurred: " + status + " " + error);
-        //         }
-        //     });
-        // }
+        // Fetch contact data with AJAX
+        function fetchContactData(contactPage) {
+            $.ajax({
+                url: "/admin/admin-home", // You might need a different endpoint or parameter to distinguish contact data fetch
+                method: "GET",
+                data: { contactPage: contactPage },
+                success: function(data) {
+                    $("#contact-tableData").html(data); // Ensure this updates only the contact table part of the page
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred fetching contact data: " + status + " " + error);
+                }
+            });
+        }
     });
 </script>

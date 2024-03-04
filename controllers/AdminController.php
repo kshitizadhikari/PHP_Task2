@@ -35,15 +35,18 @@
         public function home(Request $request, Response $response) {
             $searchTerm = $request->getBody()['search'] ?? null;
             $currentUserPage = 1; // Default to the first page
+            $currentContactPage = 1; // Default to the first page
             $itemsPerPage = self::ROW_LIMIT; // Define how many items you want per page
         
             if ($request->isAjax()) {
                 // When it's an AJAX request, fetch the 'userPage' from the request
                 $currentUserPage = (int)($request->getBody()['userPage'] ?? 1);
+                $currentContactPage = (int)($request->getBody()['contactPage'] ?? 1);
             }
         
             // Calculate the offset for the SQL query based on the current page
             $offset = ($currentUserPage - 1) * $itemsPerPage;
+            $offsetContact = ($currentContactPage - 1) * $itemsPerPage;
         
             // Adjust the query based on whether there's a search term
             if ($searchTerm) {
@@ -52,24 +55,36 @@
                 $users = $this->userRepo->findWithLimit($offset, $itemsPerPage);
             }
         
-            // Calculate the total number of pages
             $totalUserPages = $this->userRepo->findTotalPages($itemsPerPage);
+
+            $messages = $this->contactRepo->findWithLimit($offsetContact, $itemsPerPage);
+            $totalContactPages = $this->contactRepo->findTotalPages($itemsPerPage);
         
             if ($request->isAjax()) {
-                // If it's an AJAX request, return only the necessary data for the user table
-                return $this->renderPartialView('../views/ajax-partialViews/user_table', [
-                    'allUsers' => $users,
-                    'userPageNum' => $currentUserPage,
-                    'totalUserPage' => $totalUserPages,
-                ]);
+                if(isset($request->getBody()['contactPage'])) {
+                    return $this->renderPartialView('../views/admin/admin-AjaxViews/contact_table', [
+                        'allMessages' => $messages,
+                        'contactPageNum' => $currentContactPage,
+                        'totalContactPage' => $totalContactPages,
+                    ]);
+                } else {
+
+                    // If it's an AJAX request, return only the necessary data for the user table
+                    return $this->renderPartialView('../views/ajax-partialViews/user_table', [
+                        'allUsers' => $users,
+                        'userPageNum' => $currentUserPage,
+                        'totalUserPage' => $totalUserPages,
+                    ]);
+                }
             } else {
                 // For a regular request, fetch additional data if needed and include the full page
-                $allContactMessages = $this->contactRepo->findAll();
                 return $this->render('/admin/admin-home', [
                     'allUsers' => $users, 
                     'userPageNum' => $currentUserPage, 
                     'totalUserPage' => $totalUserPages, 
-                    'allMessages' => $allContactMessages
+                    'allMessages' => $messages,
+                    'contactPageNum' => $currentContactPage,
+                    'totalContactPage' => $totalContactPages
                 ]);
             }
         }
