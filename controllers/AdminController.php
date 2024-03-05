@@ -457,14 +457,16 @@ use app\models\Blog;
                     $imageObject->status = 1;
                     if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
                         $this->imageRepo->save($imageObject);
-                        //get the  id of the just saved image from db
-                        $imageId = $this->imageRepo->getId('img_name', $imageObject->img_name);
-                        Application::$app->session->setFlash('success', 'Blog created successfully');
-                        $response->redirect('/admin/admin-home');
                     }
-
+                    $imageId = $this->imageRepo->getId('img_name', $imageObject->img_name);
+                    $blog->image_id = $imageId;
                     if($this->blogRepo->save($blog)){
+                        Application::$app->session->setFlash('success', 'Blog created successfully');
+                    } else {
+                        Application::$app->session->setFlash('error', 'Blog couldn\'t be created');
                     }
+                    $response->redirect('/admin/admin-home');
+
                 }
             $blog = new Blog();
             return $this->render('/admin/admin-createBlog', ['model' => $blog]);

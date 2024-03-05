@@ -145,15 +145,18 @@
                     $imageObject->absolute_path = $imageRequest['filePath'];
                     $imageObject->size = $imageRequest['fileSize'];
                     $imageObject->status = 1;
-                    
+                    if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
+                        $this->imageRepo->save($imageObject);
+                    }
+                    $imageId = $this->imageRepo->getId('img_name', $imageObject->img_name);
+                    $blog->image_id = $imageId;
                     if($this->blogRepo->save($blog)){
-                        if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
-                            $this->imageRepo->save($imageObject);
-                        }
                         Application::$app->session->setFlash('success', 'Blog created successfully');
-                        $response->redirect('/author/author-home');
+                    } else {
+                        Application::$app->session->setFlash('error', 'Blog couldn\'t be created');
+                    }
+                    $response->redirect('/author/author-home');
                 }
-            }
             $blog = new Blog();
             return $this->render('/author/author-createBlog', ['model' => $blog]);
         }
