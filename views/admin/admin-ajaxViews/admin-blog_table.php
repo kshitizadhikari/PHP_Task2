@@ -47,4 +47,8 @@
                 <li class="page-item"><a class="page-link" id="page-link" href="?blogPage=<?php echo $totalBlogPage ?>">Last</a></li>
             </ul>
         </nav>
+<?php else: ?>
+    <div>
+        <h3>Blog Not Found</h3>
+    </div>
 <?php endif; ?>

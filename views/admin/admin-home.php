@@ -91,7 +91,7 @@ $this->title = 'Admin Home Page';
             <div class="col-3">
                 <form class="d-flex" role="search" action="" method="get">
                     <input class="form-control me-2" id="searchByTitle" type="search" placeholder="Enter Title" aria-label="Search" name="search">
-                    <button class="btn btn-outline-success" type="submit" id="submitBtn">Search</button>
+                    <button class="btn btn-outline-success" type="submit" id="submitBlogSearchBtn">Search</button>
                 </form>
             </div>
         </div>
@@ -255,10 +255,10 @@ $this->title = 'Admin Home Page';
             });
         }
 
+        //fetch search user data
         $(document).on("click", "#submitBtn", function(e) {
             e.preventDefault();
             var firstname = $("#firstName").val();
-            console.log(firstname);
             fetchUserSearchData(firstname);
         })
 
@@ -290,6 +290,28 @@ $this->title = 'Admin Home Page';
                     console.error("An error occurred fetching contact data: " + status + " " + error);
                 }
             })
+        }
+
+        //fetch search blog data
+        $(document).on("click", "#submitBlogSearchBtn", function(e) {
+            e.preventDefault();
+            var title = $("#searchByTitle").val();
+            fetchBlogSearchData(title);
+        })
+
+        function fetchBlogSearchData(title)
+        {
+            $.ajax({
+                url: '/admin/admin-home',
+                method: 'GET',
+                data: {title: title},
+                success: function(data) {
+                    $("#blog-tableData").html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred fetching search user data: " + status + " " + error);
+                }
+            });
         }
     });
 </script>

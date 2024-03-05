@@ -76,6 +76,17 @@ use app\repository\ContactRepository;
                         'userPageNum' => $currentUserPage,
                         'totalUserPage' => $totalUserPages,
                     ]);
+                } elseif(isset($request->getBody()['title'])) {
+                    // Adjust the query based on whether there's a search term
+                    $searchTerm = $request->getBody()['title'];
+                    if ($searchTerm) {
+                        $blogs = $this->blogRepo->searchWithPagination('title', $searchTerm, $offsetBlog, $itemsPerPage);
+                    }
+                    return $this->renderPartialView('../views/admin/admin-ajaxViews/admin-blog_table', [
+                        'allBlogs' => $blogs,
+                        'blogPageNum' => $currentBlogPage,
+                        'totalBlogPage' => $totalBlogPages,
+                    ]);
                 }
 
                 if(isset($request->getBody()['userPage'])) {
