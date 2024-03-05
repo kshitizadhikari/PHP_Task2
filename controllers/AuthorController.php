@@ -7,18 +7,21 @@
     use app\core\Request;
     use app\core\Response;
     use app\models\Blog;
+    use app\models\Image;
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserEditPasswordForm;
     use app\repository\BlogRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
+    use app\repository\ImageRepository;
 
     class AuthorController extends Controller
     {
-        protected $userRepo;
-        protected $roleRepo;
-        protected $blogRepo;
+        protected UserRepository $userRepo;
+        protected RoleRepository $roleRepo;
+        protected BlogRepository $blogRepo;
+        protected ImageRepository $imageRepo;
         protected const AUTHOR_ROLE = 3;
         protected const ROW_LIMIT = 3;
         
@@ -28,6 +31,7 @@
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();
             $this->blogRepo = new BlogRepository();
+            $this->imageRepo = new ImageRepository();
         }
 
         public function home(Request $request) {
@@ -116,6 +120,7 @@
                 if(!$blog->validate()) {
                     return $this->render('/author/author-createBlog', ['model' => $blog]);
                 }
+
                     $blog->unsetErrorArray();
                     $blog->user_id = $_SESSION['user']; // set the blog's user id
                     // Move uploaded file to destination
@@ -124,11 +129,23 @@
                     $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
                     $img_relative_path = "/assets/images/" . $img_components[1];
                     if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
-                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');        
+                        return;
                     }   
                     
                     $blog->featured_img = $img_relative_path;
-                    if($this->blogRepo->save($blog)){
+                    $imageObject = new Image();
+
+                    //save image in database;
+                    $imageRequest = $request->getBody()['file_info'];
+                    $imageObject->unsetErrorArray();
+                    $imageObject->relative_path = $img_relative_path;
+                    $imageObject->img_name = $imageRequest['fileName'];
+                    $imageObject->img_ext = $imageRequest['fileExt'];
+                    $imageObject->size = $imageRequest['fileSize'];
+                    $imageObject->status = 1;
+                    
+                    if($this->blogRepo->save($blog) && $this->imageRepo->save($imageObject)){
                         
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/author/author-home');

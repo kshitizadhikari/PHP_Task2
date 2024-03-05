@@ -2,15 +2,15 @@
     namespace app\repository;
     use app\repository\BaseRepository;
 
-    class BlogRepository extends BaseRepository
+    class ImageRepository extends BaseRepository
     {
         public function tableName(): string
         {
-            return 'blogs';
+            return 'images';
         }
 
         public function className(): string
         {
-            return 'Blog';
+            return 'Image';
         }
     }

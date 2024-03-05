@@ -108,9 +108,7 @@ use app\repository\UserRepository;
         public function imageGallery() {
             $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
             $imgFiles = scandir($imgDir);
-            $currentImagePage = 1;
-            $imagesPerPage = self::IMAGE_LIMIT;
-            
+
             
             if ($imgFiles !== false) {
                 // Remove "." and ".." entries from the array

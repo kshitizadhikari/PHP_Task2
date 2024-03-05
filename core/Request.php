@@ -65,26 +65,31 @@
                  // Check if request contains files
                 if ($filesUploaded) {
                     foreach ($_FILES as $key => $file) {
-                        $img_name = $_FILES[$key]['name'];
-                        $pictureName = pathinfo($img_name, PATHINFO_FILENAME);
-                        $img_size = $_FILES[$key]['size'] / (1024 * 1024); // Convert to MB
-                        $img_loc = $_FILES[$key]['tmp_name'];
-                        $img_ext = strtolower(pathinfo($img_name, PATHINFO_EXTENSION));
-                        if (!in_array($img_ext, ['jpg', 'jpeg', 'png'])) {
+                        $file_name = $_FILES[$key]['name'];
+                        $file_name_only = pathinfo($file_name, PATHINFO_FILENAME);
+                        $file_size = $_FILES[$key]['size'] / (1024 * 1024); // Convert to MB
+                        $file_loc = $_FILES[$key]['tmp_name'];
+                        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                        if (!in_array($file_ext, ['jpg', 'jpeg', 'png'])) {
                             Application::$app->session->setFlash('error', 'Unsupported image extension');
                             return [];
                         }
 
                         // Check image size (1MB limit)
-                        if ($img_size > 1) {
+                        if ($file_size > 1) {
                             Application::$app->session->setFlash('error', 'Image size must be less than 1MB');
                             return [];
                         }
 
-                        // Define the destination path
-                        $img_dest = $img_loc . "#" . $pictureName  . "." . $img_ext;
+                        // Define the destination path and separate the path and filename from '#'
+                        $img_dest = $file_loc . "#" . $file_name_only  . "." . $file_ext;
                         $body[$key] = $img_dest;
-
+                        $body['file_info'] = [
+                            'fileName' => $file_name_only,
+                            'fileSize' => $file_size,
+                            'fileExt' => $file_ext,
+                            'filePath' => $file_loc
+                        ];
                     }
                 }
                 foreach($_POST as $key=>$value)
