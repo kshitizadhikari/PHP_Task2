@@ -179,7 +179,6 @@ $this->title = 'Admin Home Page';
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        <?php endif; ?>
         <nav aria-label="Page navigation">  
             <ul class="pagination" id="pagination">
                 <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=1">First</a></li>
@@ -199,6 +198,8 @@ $this->title = 'Admin Home Page';
                 <li class="page-item"><a class="page-link" id="page-link" href="?contactPage=<?php echo $totalContactPage ?>">Last</a></li>
             </ul>
         </nav>
+        <?php endif; ?>
+
     </div>
 </section>
 

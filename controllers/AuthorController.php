@@ -145,8 +145,10 @@
                     $imageObject->size = $imageRequest['fileSize'];
                     $imageObject->status = 1;
                     
-                    if($this->blogRepo->save($blog) && $this->imageRepo->save($imageObject)){
-                        
+                    if($this->blogRepo->save($blog)){
+                        if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
+                            $this->imageRepo->save($imageObject);
+                        }
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/author/author-home');
                 }

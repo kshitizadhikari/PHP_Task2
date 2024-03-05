@@ -8,11 +8,13 @@
     use app\core\Response;
     use app\models\Blog;
     use app\models\Contact;
+    use app\models\Image;
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserEditPasswordForm;
     use app\repository\BlogRepository;
     use app\repository\ContactRepository;
+    use app\repository\ImageRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
     use PHPMailer\PHPMailer\PHPMailer;
@@ -23,6 +25,7 @@
         protected RoleRepository $roleRepo;
         protected ContactRepository $contactRepo;
         protected BlogRepository $blogRepo;
+        protected ImageRepository $imageRepo;
         protected const ADMIN_ROLE = 1;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
@@ -35,6 +38,7 @@
             $this->roleRepo = new RoleRepository();
             $this->contactRepo = new ContactRepository();
             $this->blogRepo = new BlogRepository();
+            $this->imageRepo = new ImageRepository();
         }
 
         public function home(Request $request, Response $response) {
@@ -383,6 +387,7 @@
         {
             if($request->isPost()) {
                 $blog = new Blog();
+                $imageObject = new Image();
                 $blog->loadData($request->getBody());
                 if(!$blog->validate()) {
                     return $this->render('/admin/admin-createBlog', ['model' => $blog]);
@@ -399,8 +404,18 @@
                     }   
                     
                     $blog->featured_img = $img_relative_path;
+
+                    $imageRequest = $request->getBody()['file_info'];
+                    $imageObject->unsetErrorArray();
+                    $imageObject->relative_path = $img_relative_path;
+                    $imageObject->img_name = $imageRequest['fileName'];
+                    $imageObject->img_ext = $imageRequest['fileExt']; 
+                    $imageObject->size = $imageRequest['fileSize'];
+                    $imageObject->status = 1;
                     if($this->blogRepo->save($blog)){
-                        
+                        if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
+                            $this->imageRepo->save($imageObject);
+                        }
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/admin/admin-home');
                 }
