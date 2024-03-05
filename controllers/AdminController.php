@@ -6,13 +6,13 @@
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-use app\models\Blog;
-use app\models\Contact;
+    use app\models\Blog;
+    use app\models\Contact;
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserEditPasswordForm;
-use app\repository\BlogRepository;
-use app\repository\ContactRepository;
+    use app\repository\BlogRepository;
+    use app\repository\ContactRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
     use PHPMailer\PHPMailer\PHPMailer;
@@ -26,6 +26,7 @@ use app\repository\ContactRepository;
         protected const ADMIN_ROLE = 1;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
+        protected const IMAGEE_LIMIT = 6;
         
         public function __construct() {
             $this->setLayout('adminLayout');
@@ -321,10 +322,9 @@ use app\repository\ContactRepository;
             return true;
         }
 
-        public function imageGallery() {
+        public function imageGallery(Request $request) {
             $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
             $imgFiles = scandir($imgDir);
-            
             if ($imgFiles !== false) {
                 // Remove "." and ".." entries from the array
                 $imgFiles = array_diff($imgFiles, array('.', '..'));

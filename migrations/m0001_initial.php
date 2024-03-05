@@ -82,6 +82,21 @@
             ";
 
             $db->pdo->exec($sql);
+
+            $sql = "
+                CREATE TABLE images (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    relative_path VARCHAR(255) NOT NULL,
+                    img_name VARCHAR(100) NOT NULL,
+                    img_ext VARCHAR(10) NOT NULL,
+                    size INT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    status TINYINT NOT NULL DEFAULT 1
+                ) ENGINE=INNODB;
+            ";
+
+            $db->pdo->exec($sql);
+
         }
 
         public function down()
@@ -99,6 +114,8 @@
 
             $SQL = "DROP TABLE contacts;";
             $db->pdo->exec($SQL);
-            
+
+            $SQL = "DROP TABLE images";
+            $db->pdo->exec($SQL);
         }
     }

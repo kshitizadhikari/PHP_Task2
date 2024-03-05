@@ -8,7 +8,6 @@ $this->title = 'Image Gallery Page';
     <h1>Image Gallery</h1>
 </div>
 
-<!-- Carousel wrapper -->
 <div
     id="carouselMultiItemExample"
     class="carousel slide carousel-dark text-center"
@@ -62,3 +61,15 @@ $this->title = 'Image Gallery Page';
         </div>
     </div>
 </div>
+<div>
+    <button class="btn btn-primary" id="loadMoreBtn">Load More</button>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#loadMoreBtn').on('click', function(e) {
+            e.preventDefault();
+            
+        } )
+    })
+</script>

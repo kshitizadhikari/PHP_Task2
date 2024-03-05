@@ -18,6 +18,7 @@ use app\repository\UserRepository;
         protected UserRepository $userRepo;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
+        protected const IMAGE_LIMIT = 6;
 
         public function __construct() {
             $this->blogRepo = new BlogRepository();
@@ -107,6 +108,9 @@ use app\repository\UserRepository;
         public function imageGallery() {
             $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
             $imgFiles = scandir($imgDir);
+            $currentImagePage = 1;
+            $imagesPerPage = self::IMAGE_LIMIT;
+            
             
             if ($imgFiles !== false) {
                 // Remove "." and ".." entries from the array

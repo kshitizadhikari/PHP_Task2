@@ -85,7 +85,7 @@ $this->title = 'Admin Home Page';
             <h3>Blog Section</h3>
         </div>
         <div class="row mb-3">
-            <div class="col-9">
+            <div class="col-9"> 
                 <button  class="btn btn-primary" onclick="window.location.href='/admin/admin-createBlog'">Create Blog</button>
             </div>
             <div class="col-3">
