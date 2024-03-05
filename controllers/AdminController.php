@@ -407,9 +407,10 @@
 
                     $imageRequest = $request->getBody()['file_info'];
                     $imageObject->unsetErrorArray();
-                    $imageObject->relative_path = $img_relative_path;
                     $imageObject->img_name = $imageRequest['fileName'];
                     $imageObject->img_ext = $imageRequest['fileExt']; 
+                    $imageObject->relative_path = $img_relative_path;
+                    $imageObject->absolute_path = $imageRequest['filePath'];
                     $imageObject->size = $imageRequest['fileSize'];
                     $imageObject->status = 1;
                     if($this->blogRepo->save($blog)){

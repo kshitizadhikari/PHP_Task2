@@ -88,7 +88,7 @@
                             'fileName' => $file_name_only,
                             'fileSize' => $file_size,
                             'fileExt' => $file_ext,
-                            'filePath' => $file_loc
+                            'filePath' => Application::$app::$ROOT_DIR . '\public\assets/images\\' . $file_name,
                         ];
                     }
                 }

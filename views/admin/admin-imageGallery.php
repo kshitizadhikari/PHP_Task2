@@ -70,3 +70,7 @@ $this->title = 'Image Gallery Page';
         </div>
     </div>
 </div>
+
+<div>
+    <button class="btn btn-primary" onclick="window.location.href='/admin/admin-imageGallery/addImage'">Add Image</button>
+</div>

@@ -69,6 +69,7 @@
     $app->router->get('/admin/admin-markMessageRead',[AdminController::class, 'markMessageRead']);
 
     $app->router->get('/admin/admin-imageGallery',[AdminController::class, 'imageGallery']);
+    $app->router->get('/admin/admin-imageGallery/addImage',[AdminController::class, 'addImage']);
     $app->router->get('/admin/admin-imageGallery/deleteImage',[AdminController::class, 'deleteImage']);
 
     

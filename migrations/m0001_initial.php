@@ -86,12 +86,13 @@
             $sql = "
                 CREATE TABLE images (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    relative_path VARCHAR(255) NOT NULL,
                     img_name VARCHAR(100) NOT NULL,
                     img_ext VARCHAR(10) NOT NULL,
+                    relative_path VARCHAR(255) NOT NULL,
+                    absolute_path VARCHAR(255) NOT NULL,
                     size INT NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    status TINYINT NOT NULL DEFAULT 1
+                    status TINYINT NOT NULL DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 ) ENGINE=INNODB;
             ";
 
