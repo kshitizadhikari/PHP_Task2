@@ -18,10 +18,8 @@
                         <td><img src="<?php echo $blog['featured_img'] ?>" height="100rem" width="100rem" /></td>
                         <td>
                                 <a href="/admin/admin-viewBlog?id=<?php echo $blog['id']?>">View</a>
-                                <?php if($blog['user_id'] == $_SESSION['user']): ?>
-                                | <a href="/admin/admin-editBlog?id=<?php echo $blog['id']?>">Edit</a> | 
-                                <a href="/admin/admin-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
-                                <?php endif; ?>
+                                | <a href="/admin/admin-editBlog?id=<?php echo $blog['id']?>">Edit</a>
+                                | <a href="/admin/admin-deleteBlog?id=<?php echo $blog['id']?>">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

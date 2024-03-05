@@ -3,9 +3,9 @@
  * @var $this \app\core\View
  * @var $blog \app\models\Blog
  */
-$this->title = 'Author View Blog Page';
+$this->title = 'Admin View Blog Page';
 ?>
-<h1>Author View Blog</h1>
+<h1>Admin View Blog</h1>
 
     <div class="card mb-3" style="max-width: 80%;">
     <div class="row g-0">
@@ -30,7 +30,7 @@ $this->title = 'Author View Blog Page';
                 </ul>
                 
             <div class="mt-3">
-                <button class="btn btn-primary" onclick="window.location.href='/author/author-home'" >Go Back</button>
+                <button class="btn btn-primary" onclick="window.location.href='/admin/admin-home'" >Go Back</button>
             </div>
             </div>
         </div>

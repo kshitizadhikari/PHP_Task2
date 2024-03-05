@@ -365,6 +365,19 @@ use app\repository\ContactRepository;
                 return $response->redirect('/admin/admin-imageGallery');
             }
         }   
+        public function viewBlog(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $blog = new Blog();
+            $blog = $this->blogRepo->findById($blog_id); 
+            $author = $this->userRepo->findById($blog->user_id);
+            if(!$blog) {
+                Application::$app->session->setFlash('error', 'Blog view error');
+                return $response->redirect('/admin/admin-home');
+            }
+            return $this->render('/admin/admin-viewBlog', ['blog' => $blog, 'author' => $author]);
+        }
 
         public function createBlog(Request $request, Response $response)
         {
