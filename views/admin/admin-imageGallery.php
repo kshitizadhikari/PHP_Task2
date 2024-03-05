@@ -8,6 +8,10 @@ $this->title = 'Image Gallery Page';
     <h1>Image Gallery</h1>
 </div>
 
+<div>
+    <button class="btn btn-primary" onclick="window.location.href='/admin/admin-imageGallery/addImage'">Add Image</button>
+</div>
+
 <!-- Carousel wrapper -->
 <div
     id="carouselMultiItemExample"
@@ -69,8 +73,4 @@ $this->title = 'Image Gallery Page';
             </div>
         </div>
     </div>
-</div>
-
-<div>
-    <button class="btn btn-primary" onclick="window.location.href='/admin/admin-imageGallery/addImage'">Add Image</button>
 </div>

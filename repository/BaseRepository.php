@@ -18,6 +18,16 @@ use PDO;
             $this->tableName = static::tableName();
         }
 
+        public function getId($col, $val): int
+        {
+            $sql = "SELECT id FROM $this->tableName WHERE $col = :value";
+            $statement = $this->db->prepare($sql);
+            $statement->bindValue(':value', $val);
+            $statement->execute();
+            $result = $statement->fetchColumn(); // Fetch the first column from the result set
+            return $result; // This should directly return the ID value
+        }
+        
         public function save($obj)
         {
             $data =  $this->getObjectData($obj);

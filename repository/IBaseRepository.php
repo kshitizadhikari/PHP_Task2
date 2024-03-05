@@ -10,6 +10,7 @@
             return get_object_vars($obj);
         }
 
+        abstract public function getId($col, $val): int;
         abstract public function save($obj);
         abstract public function findById($id);
         abstract public function findAll();

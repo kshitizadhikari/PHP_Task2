@@ -6,7 +6,8 @@
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-    use app\models\Blog;
+use app\models\AddImageForm;
+use app\models\Blog;
     use app\models\Contact;
     use app\models\Image;
     use app\models\User;
@@ -346,6 +347,46 @@
             return $this->render('admin/admin-imageGallery', ['images' => $imagesWithPath]);
         }
 
+        public function addImage(Request $request, Response $response) {
+            $addImageForm = new AddImageForm();
+
+            if($request->isPost()){
+                $addImageForm->loadData($request->getBody());
+                if($addImageForm->validate())
+                {
+                    $imageObject = new Image();
+                    $img_components = explode("#", $addImageForm->absolute_path); 
+                    $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
+                    $img_relative_path = "/assets/images/" . $img_components[1];
+                    if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                    }   
+                    
+                    $imageRequest = $request->getBody()['file_info'];
+                    $imageObject->unsetErrorArray();
+                    $imageObject->img_name = $imageRequest['fileName'];
+                    $imageObject->img_ext = $imageRequest['fileExt']; 
+                    $imageObject->relative_path = $img_relative_path;
+                    $imageObject->absolute_path = $imageRequest['filePath'];
+                    $imageObject->size = $imageRequest['fileSize'];
+                    $imageObject->status = 1;
+                    if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
+                        $this->imageRepo->save($imageObject);
+                        Application::$app->session->setFlash('success', 'Image added successfully');
+
+                    } else {
+                        Application::$app->session->setFlash('error', 'Please select a image with a different name. ');
+
+                    }
+                    $response->redirect('/admin/admin-imageGallery');
+                }
+
+            }
+
+            return $this->render('/admin/admin-addImage', ['model' => $addImageForm]);
+
+        }
+
         public function deleteImage(Request $request, Response $response) {
             $imgName = $request->getBody()['imgName'];
             
@@ -400,7 +441,8 @@
                     $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
                     $img_relative_path = "/assets/images/" . $img_components[1];
                     if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
-                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');    
+                        return;
                     }   
                     
                     $blog->featured_img = $img_relative_path;
@@ -413,14 +455,17 @@
                     $imageObject->absolute_path = $imageRequest['filePath'];
                     $imageObject->size = $imageRequest['fileSize'];
                     $imageObject->status = 1;
-                    if($this->blogRepo->save($blog)){
-                        if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
-                            $this->imageRepo->save($imageObject);
-                        }
+                    if($this->imageRepo->findByImageName($imageObject->img_name) == NULL) {
+                        $this->imageRepo->save($imageObject);
+                        //get the  id of the just saved image from db
+                        $imageId = $this->imageRepo->getId('img_name', $imageObject->img_name);
                         Application::$app->session->setFlash('success', 'Blog created successfully');
                         $response->redirect('/admin/admin-home');
+                    }
+
+                    if($this->blogRepo->save($blog)){
+                    }
                 }
-            }
             $blog = new Blog();
             return $this->render('/admin/admin-createBlog', ['model' => $blog]);
         }

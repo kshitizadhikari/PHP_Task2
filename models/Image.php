@@ -38,7 +38,7 @@
         public function rules(): array
         {
             return [
-                'img_name' => [self::RULE_REQUIRED],
+                'img_name' => [self::RULE_REQUIRED, self::RULE_UNIQUE],
                 'img_ext' => [self::RULE_REQUIRED, ],
                 'relative_path' => [self::RULE_REQUIRED],
                 'absolute_path' => [self::RULE_REQUIRED],

@@ -8,6 +8,7 @@
         public string $title = '';
         public string $description = '';
         public string $featured_img = '';
+        public int $image_id; //created by user_id
         public int $user_id; //created by user_id
         public int $status=1; //blog status
 
@@ -16,7 +17,7 @@
         }
 
         public function attributes(): array {
-            return ['id', 'title', 'description', 'featured_img', 'user_id', 'status'];
+            return ['id', 'title', 'description', 'featured_img', 'image_id', 'user_id', 'status'];
         }
 
         public function labels(): array {

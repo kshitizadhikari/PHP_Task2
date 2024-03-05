@@ -70,6 +70,7 @@
 
     $app->router->get('/admin/admin-imageGallery',[AdminController::class, 'imageGallery']);
     $app->router->get('/admin/admin-imageGallery/addImage',[AdminController::class, 'addImage']);
+    $app->router->post('/admin/admin-imageGallery/addImage',[AdminController::class, 'addImage']);
     $app->router->get('/admin/admin-imageGallery/deleteImage',[AdminController::class, 'deleteImage']);
 
     
