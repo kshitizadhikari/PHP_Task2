@@ -46,6 +46,7 @@
     //admin routes
     $app->router->get('/admin/admin-home', [AdminController::class, 'home']);
     $app->router->get('/admin/admin-profile',[AdminController::class, 'profile']);
+
     $app->router->get('/admin/admin-searchUser',[AdminController::class, 'searchUser']);
     $app->router->get('/admin/admin-createUser',[AdminController::class, 'createUser']);
     $app->router->post('/admin/admin-createUser',[AdminController::class, 'createUser']);
@@ -55,9 +56,18 @@
     $app->router->get('/admin/admin-changeSelfPassword',[AdminController::class, 'changeSelfPassword']);
     $app->router->post('/admin/admin-changeSelfPassword',[AdminController::class, 'changeSelfPassword']);
     $app->router->get('/admin/admin-deleteUser',[AdminController::class, 'deleteUser']);
+
+    $app->router->get('/admin/admin-createBlog',[AdminController::class, 'createBlog']);
+    $app->router->post('/admin/admin-createBlog',[AdminController::class, 'createBlog']);
+    $app->router->get('/admin/admin-editBlog',[AdminController::class, 'editBlog']);
+    $app->router->post('/admin/admin-editBlog',[AdminController::class, 'editBlog']);
+    $app->router->get('/admin/admin-deleteBlog',[AdminController::class, 'deleteBlog']);
+    $app->router->get('/admin/admin-viewBlog',[AdminController::class, 'viewBlog']);
+
     $app->router->get('/admin/admin-viewMessage',[AdminController::class, 'viewMessage']);
     $app->router->get('/admin/admin-deleteMessage',[AdminController::class, 'deleteMessage']);
     $app->router->get('/admin/admin-markMessageRead',[AdminController::class, 'markMessageRead']);
+
     $app->router->get('/admin/admin-imageGallery',[AdminController::class, 'imageGallery']);
     $app->router->get('/admin/admin-imageGallery/deleteImage',[AdminController::class, 'deleteImage']);
 

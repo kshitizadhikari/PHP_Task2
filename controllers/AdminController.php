@@ -6,7 +6,8 @@
     use app\core\middlewares\AuthMiddleware;
     use app\core\Request;
     use app\core\Response;
-    use app\models\Contact;
+use app\models\Blog;
+use app\models\Contact;
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserEditPasswordForm;
@@ -352,7 +353,7 @@ use app\repository\ContactRepository;
                 if (unlink($imagePath)) {
                     $response->setStatusCode(200);
                     Application::$app->session->setFlash('success', 'Image deleted successfully');
-                    return $response->redirect('/admin/admin-home');
+                    return $response->redirect('/admin/admin-imageGallery');
                 } else {
                     $response->setStatusCode(500);
                     Application::$app->session->setFlash('error', 'Image couldn\'t be deleted');
@@ -361,9 +362,53 @@ use app\repository\ContactRepository;
             } else {
                 $response->setStatusCode(404);
                 Application::$app->session->setFlash('error', 'Image Not Found');
-                return $response->redirect('/admin/admin-home');
+                return $response->redirect('/admin/admin-imageGallery');
             }
         }   
+
+        public function createBlog(Request $request, Response $response)
+        {
+            if($request->isPost()) {
+                $blog = new Blog();
+                $blog->loadData($request->getBody());
+                if(!$blog->validate()) {
+                    return $this->render('/admin/admin-createBlog', ['model' => $blog]);
+                }
+                    $blog->unsetErrorArray();
+                    $blog->user_id = $_SESSION['user']; // set the blog's user id
+                    // Move uploaded file to destination
+                    //img_components[0] stores temporary path img_components[1] stores imageName
+                    $img_components = explode("#", $blog->featured_img); 
+                    $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
+                    $img_relative_path = "/assets/images/" . $img_components[1];
+                    if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                    }   
+                    
+                    $blog->featured_img = $img_relative_path;
+                    if($this->blogRepo->save($blog)){
+                        
+                        Application::$app->session->setFlash('success', 'Blog created successfully');
+                        $response->redirect('/admin/admin-home');
+                }
+            }
+            $blog = new Blog();
+            return $this->render('/admin/admin-createBlog', ['model' => $blog]);
+        }
+
+        
+
+        public function deleteBlog(Request $request, Response $response)
+        {
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            if($this->blogRepo->delete($blog_id)) {
+                Application::$app->session->setFlash('success', 'Blog deleted successfully');
+            } else {
+                Application::$app->session->setFlash('error', 'Blog deletion unsuccessful');
+            }
+            return $response->redirect('/admin/admin-home');
+        }
     }
 
 ?>
