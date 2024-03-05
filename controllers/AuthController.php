@@ -23,8 +23,6 @@
             $loginForm = new LoginForm();
             if($request->isPost()) {
                 $loginForm->loadData($request->getBody());
-                if(!$loginForm->validate()){
-                }
                 if($loginForm->validate() && $loginForm->login()) {
                     $user_role_id = Application::$app->user->role_id;
                     $user_status = Application::$app->user->status;
@@ -39,6 +37,7 @@
                             $response->redirect('/user/user-home');
                         }
                     } else {
+                        Application::$app->logout();
                         Application::$app->session->setFlash('error', 'Your account hasn\'t been activated');
                     }
                     return $this->render('login', ['model' => $loginForm]);
