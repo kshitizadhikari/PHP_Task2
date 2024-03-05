@@ -396,7 +396,49 @@ use app\repository\ContactRepository;
             return $this->render('/admin/admin-createBlog', ['model' => $blog]);
         }
 
-        
+        public function editBlog(Request $request, Response $response) {
+            $blog = new Blog();
+            $requestData = $request->getBody();
+            $blog_id = isset($requestData['id']) ? (int)$requestData['id'] : null;
+            $blog = $this->blogRepo->findById($blog_id);
+
+            if($request->isPost())
+            {
+                $blog = new Blog();
+                $requestData = $request->getBody();
+                $blog = $this->blogRepo->findById($requestData['id']);
+                $blog->title = $requestData['title'] ?? $blog->title;
+                $blog->description = $requestData['description'] ?? $blog->description;
+                $blog->status = $requestData['status'] ?? $blog->status;
+                
+                if(!$blog->validate())
+                {
+                    return $this->render('/admin/admin-editBlog', ['model' => $blog]);
+                }
+
+                
+                if(isset($requestData['featured_img']))
+                {
+
+                    // Move uploaded file to destination
+                    //img_components[0] stores temporary path img_components[1] stores imageName
+                    $img_components = explode("#", $requestData['featured_img']); 
+                    $img_absolute_path = Application::$ROOT_DIR . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . $img_components[1];
+                    $img_relative_path = "/assets/images/" . $img_components[1];
+                    if (!move_uploaded_file($img_components[0], $img_absolute_path)) {
+                        Application::$app->session->setFlash('error', 'Image couldn\'t be uploaded');                            return;
+                    }   
+                    $blog->featured_img = $img_relative_path;
+                }
+                    
+                $blog->unsetErrorArray();
+                $this->blogRepo->update($blog);
+                Application::$app->session->setFlash('success', 'Blog updated successfully');
+                return $response->redirect('/admin/admin-home');
+            }
+
+            return $this->render('/admin/admin-editBlog', ['model' => $blog]);
+        }
 
         public function deleteBlog(Request $request, Response $response)
         {
