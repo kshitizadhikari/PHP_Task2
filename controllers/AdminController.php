@@ -10,7 +10,8 @@
     use app\models\User;
     use app\models\UserEditDetailsForm;
     use app\models\UserEditPasswordForm;
-    use app\repository\ContactRepository;
+use app\repository\BlogRepository;
+use app\repository\ContactRepository;
     use app\repository\RoleRepository;
     use app\repository\UserRepository;
     use PHPMailer\PHPMailer\PHPMailer;
@@ -20,6 +21,7 @@
         protected UserRepository $userRepo;
         protected RoleRepository $roleRepo;
         protected ContactRepository $contactRepo;
+        protected BlogRepository $blogRepo;
         protected const ADMIN_ROLE = 1;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
@@ -30,29 +32,36 @@
             $this->userRepo = new UserRepository();
             $this->roleRepo = new RoleRepository();
             $this->contactRepo = new ContactRepository();
+            $this->blogRepo = new BlogRepository();
         }
 
         public function home(Request $request, Response $response) {
             $searchTerm = $request->getBody()['search'] ?? null;
             $currentUserPage = 1; // Default to the first page
             $currentContactPage = 1; // Default to the first page
+            $currentBlogPage = 1; // Default to the first page
             $itemsPerPage = self::ROW_LIMIT; // Define how many items you want per page
         
             if ($request->isAjax()) {
                 // When it's an AJAX request, fetch the 'userPage' of 'contactPage' from the request
                 $currentUserPage = (int)($request->getBody()['userPage'] ?? 1);
                 $currentContactPage = (int)($request->getBody()['contactPage'] ?? 1);
+                $currentBlogPage = (int)($request->getBody()['blogPage'] ?? 1);
             }
         
             // Calculate the offset for the SQL query based on the current page
             $offset = ($currentUserPage - 1) * $itemsPerPage;
             $offsetContact = ($currentContactPage - 1) * $itemsPerPage;
+            $offsetBlog = ($currentBlogPage - 1) * $itemsPerPage;
         
             $users = $this->userRepo->findWithLimit($offset, $itemsPerPage);
             $totalUserPages = $this->userRepo->findTotalPages($itemsPerPage);
 
             $messages = $this->contactRepo->findWithLimit($offsetContact, $itemsPerPage);
             $totalContactPages = $this->contactRepo->findTotalPages($itemsPerPage);
+        
+            $blogs = $this->blogRepo->findWithLimit($offsetBlog, $itemsPerPage);
+            $totalBlogPages = $this->blogRepo->findTotalPages($itemsPerPage);
         
             if ($request->isAjax()) {
 
@@ -69,27 +78,35 @@
                     ]);
                 }
 
-                if(isset($request->getBody()['contactPage'])) {
-                    return $this->renderPartialView('../views/admin/admin-ajaxViews/contact_table', [
-                        'allMessages' => $messages,
-                        'contactPageNum' => $currentContactPage,
-                        'totalContactPage' => $totalContactPages,
-                    ]);
-                } else {
-
-                    // If it's an AJAX request, return only the necessary data for the user table
+                if(isset($request->getBody()['userPage'])) {
                     return $this->renderPartialView('../views/ajax-partialViews/user_table', [
                         'allUsers' => $users,
                         'userPageNum' => $currentUserPage,
                         'totalUserPage' => $totalUserPages,
                     ]);
+                } elseif(isset($request->getBody()['blogPage'])) {
+                    return $this->renderPartialView('../views/admin/admin-ajaxViews/admin-blog_table', [
+                        'allBlogs' => $blogs,
+                        'blogPageNum' => $currentBlogPage,
+                        'totalBlogPage' => $totalBlogPages,
+                    ]);
+                } else {
+                    return $this->renderPartialView('../views/admin/admin-ajaxViews/admin-contact_table', [
+                        'allMessages' => $messages,
+                        'contactPageNum' => $currentContactPage,
+                        'totalContactPage' => $totalContactPages,
+                    ]);
                 }
+                
             } else {
                 // For a regular request, fetch additional data if needed and include the full page
                 return $this->render('/admin/admin-home', [
                     'allUsers' => $users, 
                     'userPageNum' => $currentUserPage, 
                     'totalUserPage' => $totalUserPages, 
+                    'allBlogs' => $blogs, 
+                    'blogPageNum' => $currentBlogPage, 
+                    'totalBlogPage' => $totalBlogPages,
                     'allMessages' => $messages,
                     'contactPageNum' => $currentContactPage,
                     'totalContactPage' => $totalContactPages

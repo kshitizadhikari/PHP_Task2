@@ -15,7 +15,7 @@ $this->title = 'Image Gallery Page';
     data-mdb-ride="carousel"
     >
     <!-- Controls -->
-    <div class="d-flex justify-content-center mb-4">
+    <!-- <div class="d-flex justify-content-center mb-4">
         <button
         class="carousel-control-prev position-relative"
         type="button"
@@ -34,7 +34,7 @@ $this->title = 'Image Gallery Page';
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
         </button>
-    </div>
+    </div> -->
     <!-- Inner -->
     <div class="carousel-inner py-4">
         <!-- Single item -->
