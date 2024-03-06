@@ -9,6 +9,7 @@ use app\models\Blog;
 use app\models\Contact;
 use app\repository\BlogRepository;
 use app\repository\ContactRepository;
+use app\repository\ImageRepository;
 use app\repository\UserRepository;
 
     class HomeController extends Controller
@@ -16,6 +17,7 @@ use app\repository\UserRepository;
         protected BlogRepository $blogRepo;
         protected ContactRepository $contactRepo;
         protected UserRepository $userRepo;
+        protected ImageRepository $imageRepo;
         protected const ROW_START = 0;
         protected const ROW_LIMIT = 2;
         protected const IMAGE_LIMIT = 6;
@@ -24,6 +26,7 @@ use app\repository\UserRepository;
             $this->blogRepo = new BlogRepository();
             $this->contactRepo = new ContactRepository();
             $this->userRepo = new UserRepository();
+            $this->imageRepo = new ImageRepository();
         }
         
         public function home(Request $request) {
@@ -105,27 +108,29 @@ use app\repository\UserRepository;
             return $this->render('viewBlog', ['blog' => $blog, 'author' => $author]);
         }
 
-        public function imageGallery() {
-            $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
-            $imgFiles = scandir($imgDir);
-
-            
-            if ($imgFiles !== false) {
-                // Remove "." and ".." entries from the array
-                $imgFiles = array_diff($imgFiles, array('.', '..'));
-
-                foreach($imgFiles as $file) {
-                    $imagesWithPath[] = [
-                        'name' => $file,
-                        'path' => '/assets/images/'. $file
-                    ];                     
+        public function imageGallery(Request $request) {
+            $offset = 0;
+            $numImages = self::IMAGE_LIMIT;
+            $allImages = $this->imageRepo->findWithLimit($offset, $numImages);
+            if($request->isAjax())
+            {
+                if(isset($request->getBody()['currentNumOfImages'])){
+                    $currentNumOfImages = $request->getBody()['currentNumOfImages'];
+                    $numImages = $currentNumOfImages + $numImages;
+                    $allImages = $this->imageRepo->findWithLimit($offset, $numImages);
+                    $totalImages = $this->imageRepo->findTotalRows();
+                    return $this->renderPartialView('../views/ajax-partialViews/image_table', [
+                        'allImages' => $allImages,
+                        'currentNumImages' => $numImages,
+                        'totalImages' => $totalImages,
+                    ]);
                 }
-            } else {
-                echo "Failed to read directory.";
             }
-            
-            return $this->render('/imageGallery', ['images' => $imagesWithPath]);
-        }                                                                           
+            return $this->render('/imageGallery', [
+                'allImages'=>$allImages,
+                'currentNumImages' => $numImages,
+            ]);
+        }                                                               
         
     }
 
