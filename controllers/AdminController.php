@@ -69,9 +69,8 @@ use app\models\Blog;
         
             $blogs = $this->blogRepo->findWithLimit($offsetBlog, $itemsPerPage);
             $totalBlogPages = $this->blogRepo->findTotalPages($itemsPerPage);
-        
-            if ($request->isAjax()) {
 
+            if ($request->isAjax()) {
                 if(isset($request->getBody()['firstName'])) {
                      // Adjust the query based on whether there's a search term
                     $searchTerm = $request->getBody()['firstName'];
@@ -328,23 +327,28 @@ use app\models\Blog;
         }
 
         public function imageGallery(Request $request) {
-            $imgDir = Application::$app::$ROOT_DIR . "/public/assets/images/";
-            $imgFiles = scandir($imgDir);
-            if ($imgFiles !== false) {
-                // Remove "." and ".." entries from the array
-                $imgFiles = array_diff($imgFiles, array('.', '..'));
-
-                foreach($imgFiles as $file) {
-                    $imagesWithPath[] = [
-                        'name' => $file,
-                        'path' => '/assets/images/'. $file
-                    ];                     
+            $currentImagePage = 1;
+            $offset = 0;
+            $numImages = self::IMAGEE_LIMIT;
+            $allImages = $this->imageRepo->findWithLimit($offset, $numImages);
+            if($request->isAjax())
+            {
+                if(isset($request->getBody()['currentNumOfImages'])){
+                    $currentNumOfImages = $request->getBody()['currentNumOfImages'];
+                    $numImages = $currentNumOfImages + $numImages;
+                    $allImages = $this->imageRepo->findWithLimit($offset, $numImages);
+                    $totalImages = $this->imageRepo->findTotalRows();
+                    return $this->renderPartialView('../views/admin/admin-ajaxViews/admin-image_table', [
+                        'allImages' => $allImages,
+                        'currentNumImages' => $numImages,
+                        'totalImages' => $totalImages,
+                    ]);
                 }
-            } else {
-                echo "Failed to read directory.";
             }
-            
-            return $this->render('admin/admin-imageGallery', ['images' => $imagesWithPath]);
+            return $this->render('admin/admin-imageGallery', [
+                'allImages'=>$allImages,
+                'currentNumImages' => $numImages,
+            ]);
         }
 
         public function addImage(Request $request, Response $response) {

@@ -73,19 +73,19 @@ class m0001_initial
 
         // Create blogs table
         $sql = "
-            CREATE TABLE blogs (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                title VARCHAR(100) NOT NULL,
-                description TEXT NOT NULL,
-                featured_img VARCHAR(255),
-                image_id INT NOT NULL,
-                user_id INT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                status TINYINT NOT NULL,
-                FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE CASCADE,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-            ) ENGINE=INNODB;
+        CREATE TABLE blogs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(100) NOT NULL,
+            description TEXT NOT NULL,
+            featured_img VARCHAR(255),
+            image_id INT,
+            user_id INT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            status TINYINT NOT NULL,
+            FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE SET NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=INNODB;
         ";
         $db->pdo->exec($sql);
 

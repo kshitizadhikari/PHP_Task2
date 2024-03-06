@@ -77,7 +77,15 @@ use PDO;
             $total_rows = $statement->rowCount();
             $totalPageNum = ceil($total_rows/$limit);
             return $totalPageNum;
+        }
 
+        public function findTotalRows()
+        {
+            $sql = "SELECT * FROM $this->tableName";
+            $statement = $this->db->prepare($sql);
+            $statement->execute();
+            $total_rows = $statement->rowCount();
+            return $total_rows;
         }
 
 
